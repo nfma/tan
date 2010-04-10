@@ -66,7 +66,8 @@ package com.igwjam
 			
 			//tan players
 			for each(var dude:SunPeople in allPeople) {
-				dude.tanUsingThe(sun.xPos, sun.yPos);
+				if(dude != null)
+					dude.tanUsingThe(sun.xPos, sun.yPos);
 			}
 
 			trace("mouse: "+sun.xPos+" "+sun.yPos);

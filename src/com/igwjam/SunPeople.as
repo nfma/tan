@@ -56,6 +56,9 @@ package com.igwjam
 
 		public function tanUsingThe(sunXPosition:Number, sunYPosition:Number):void
 		{
+			if(this.beachState != tanning)
+				return;
+				
 			tan += calculateIntensityWith(sunXPosition, sunXPosition) * tanMultiplier;
 			
 			tanText.text = (Math.round(tan*100)/100).toString();

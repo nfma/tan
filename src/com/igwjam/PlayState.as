@@ -97,7 +97,7 @@ package com.igwjam
 			sun.move();
 			
 			eveSky.alpha = Math.sin(sun.y/208.0*(Math.PI/2.0));
-			trace(eveSky.alpha);
+//			trace(eveSky.alpha);
 						
 			//tan players
 			for each(var dude:SunPeople in allPeople) {

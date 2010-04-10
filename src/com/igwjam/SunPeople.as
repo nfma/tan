@@ -24,14 +24,15 @@ package com.igwjam
 		public function SunPeople(duration:Number, tanMult:Number, targetPos:int)
 		{
 			tan = 0;
-			timeToLeave = FlxG.elapsed + untilPissOff;
+			timeToLeave = 0; //doesnt work like this because elapsed is time since last FRAME! FlxG.elapsed + untilPissOff;
 			tanMultiplier = tanMult;
 			targetPosition = targetPos;
 			
 			untilPissOff = duration;
 			
 			super(0, 150);
-			loadGraphic(ImgSunDude, false, false);
+			loadGraphic(ImgSunDude, true, true, 32, 64);
+			addAnimation("walk", [0, 1, 2], 4, true);
 			
 			state = walking;
 		}
@@ -48,6 +49,7 @@ package com.igwjam
 			switch(state)
 			{
 				case walking:
+					play("walk");
 					if(this.velocity.x == 0)
 						this.acceleration.x = 20;
 					if(this.velocity.x >= 50)

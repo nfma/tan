@@ -1,6 +1,6 @@
 package {
 	import org.flixel.*;
-	import com.adamatomic.Mode.MenuState;
+	import com.adamatomic.Mode.PlayState;
 	
 	[SWF(width="640", height="480", backgroundColor="#000000")]
 	[Frame(factoryClass="Preloader")]
@@ -9,7 +9,7 @@ package {
 	{
 		public function Mode():void
 		{
-			super(320,240,MenuState);
+			super(320,240,PlayState);
 			FlxState.bgColor = 0xff131c1b;
 			useDefaultHotKeys = true;
 		}

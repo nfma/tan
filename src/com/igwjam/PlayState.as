@@ -31,8 +31,7 @@ package com.igwjam
 			add(sun);
 			FlxG.mouse.show();
 			
-			allPeople = new Array(null, null, null);
-			
+			allPeople = new Array(null, null, null)
 		}
 
 		override public function update():void

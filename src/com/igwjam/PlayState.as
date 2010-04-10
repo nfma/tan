@@ -15,9 +15,12 @@ package com.igwjam
 		private var sun:Sun = new Sun;
 		private var allPeople:Array;
 		
+<<<<<<< Updated upstream
 		public var timeSinceStart:Number = 0.0;
 		
 		
+=======
+>>>>>>> Stashed changes
 		public function PlayState()
 		{
 			super();
@@ -30,12 +33,15 @@ package com.igwjam
 			add(sun);
 			FlxG.mouse.show();
 			
-			allPeople = new Array();
 			var tempDude:SunPeople;
 			
 			tempDude = new SunPeople(10, 1, 100);
 			add(tempDude);
-
+			
+			allPeople = new Array;
+			allPeople.push(tempDude);
+			
+			
 //			for (var i:int = 0; i < 3; i++)
 //			{
 //				tempDude = new SunPeople(100 * i, 1 * i, 100 * i);
@@ -44,7 +50,7 @@ package com.igwjam
 //			}
 			
 		}
-
+		
 		override public function update():void
 		{
 			this.timeSinceStart += FlxG.elapsed;
@@ -54,7 +60,13 @@ package com.igwjam
 			//TODO: update sun movement
 			sun.move();
 			
-			trace("mouse: "+sun.getXPos()+" "+sun.getYPos());
+			trace(allPeople.length);
+			
+			for each(var dude:SunPeople in allPeople) {
+				dude.tanUsingThe(sun.xPos, sun.yPos);
+			}
+
+			trace("mouse: "+sun.xPos+" "+sun.yPos);
 						
 			//TODO: calculate player sun distance & tan players
 			

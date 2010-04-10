@@ -14,6 +14,7 @@ package com.igwjam
 		private var beachState:int;
 		private var tanMultiplier:Number;
 		private var targetPosition:int;
+		private var tanText:FlxText;
 		
 		
 		public static const walking:int = 0;
@@ -34,6 +35,13 @@ package com.igwjam
 			super(0, 380);
 			loadGraphic(ImgSunDude, true, true, 32, 64);
 			
+			tanText = new FlxText(0, 10,FlxG.width);
+			tanText.color = 0x000000;
+			tanText.size = 8;
+			tanText.alignment = "left";
+			//score.scrollFactor = ssf;
+			tanText.text = tan.toString();
+			
 			
 			addAnimation("idle", [0]);
 			addAnimation("walk", [0, 1, 2], 4, true);
@@ -48,7 +56,12 @@ package com.igwjam
 
 		public function tanUsingThe(sunXPosition:Number, sunYPosition:Number):void
 		{
+			if(this.beachState != tanning)
+				return;
+				
 			tan += calculateIntensityWith(sunXPosition, sunXPosition) * tanMultiplier;
+			
+			tanText.text = (Math.round(tan*100)/100).toString();
 		}
 		
 		private function calculateIntensityWith(sunXPosition:Number, sunYPosition:Number):Number
@@ -73,6 +86,9 @@ package com.igwjam
 			//TODO: update statemachine
 			var timeSinceStart:Number = (FlxG.state as PlayState).timeSinceStart;
 			
+			tanText.x = this.x;
+			tanText.y = this.y + this.height;
+			
 			switch(this.beachState)
 			{
 				case walking:
@@ -94,6 +110,7 @@ package com.igwjam
 					{
 						this.velocity.x = 250.0;
 						this.y = 380;
+						FlxG.score -= 20;
 						this.beachState = leaveAngry;
 						//TODO: make an angry animation 
 						play("leaveAngry");
@@ -104,6 +121,9 @@ package com.igwjam
 						{
 							this.velocity.x = 200.0;
 							this.y = 380;
+							
+							FlxG.score += 10;
+							
 							this.beachState = leaveHappy;
 							//TODO: make an happy animation 
 							play("leaveHappy");
@@ -112,6 +132,8 @@ package com.igwjam
 						{
 							this.velocity.x = 250.0;
 							this.y = 380;
+							FlxG.score -= 20;
+
 							this.beachState = leaveAngry;
 							//TODO: make an angry animation 
 							play("leaveAngry");
@@ -133,6 +155,14 @@ package com.igwjam
 			
 			super.update();
 		}
+		
+		override public function render():void
+		{
+			super.render();
+			
+			tanText.render();
+		}	
+
 
 		public function getState():int
 		{

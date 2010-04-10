@@ -33,7 +33,7 @@ package com.igwjam
 			allPeople = new Array();
 			var tempDude:SunPeople;
 			
-			tempDude = new SunPeople(100, 1, 100);
+			tempDude = new SunPeople(10, 1, 100);
 			add(tempDude);
 
 //			for (var i:int = 0; i < 3; i++)

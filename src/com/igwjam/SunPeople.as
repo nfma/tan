@@ -37,6 +37,8 @@ package com.igwjam
 			
 			addAnimation("idle", [0]);
 			addAnimation("walk", [0, 1, 2], 4, true);
+			addAnimation("leaveHappy", [0, 1, 2], 2, true);
+			addAnimation("leaveAngry", [0, 1, 2], 8, true);
 			
 			this.velocity.x = 50.0;
 			this.beachState = walking;
@@ -71,16 +73,20 @@ package com.igwjam
 					this.timeSinceTanning += FlxG.elapsed;
 					if(this.timeSinceTanning >= this.timeToLeave)
 					{
-						this.velocity.x = 50.0;
 						if (this.tan > 0.7 && this.tan < 1.0)
 						{
+							this.velocity.x = 50.0;
 							this.beachState = leaveHappy;
+							//TODO: make an happy animation 
 							play("leaveHappy");
 						}
 						else
 						{
+							this.velocity.x = 100.0;
 							this.beachState = leaveAngry;
+							//TODO: make an angry animation 
 							play("leaveAngry");
+							
 						}
 					}
 					break;

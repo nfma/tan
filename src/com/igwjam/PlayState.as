@@ -1,10 +1,13 @@
 package com.igwjam
 {
-	import org.flixel.FlxState;
-	import org.flixel.FlxText;
-	import org.flixel.FlxG;
 	import com.igwjam.Sun;
 	import com.igwjam.SunPeople;
+	
+	import flash.ui.Mouse;
+	
+	import org.flixel.FlxG;
+	import org.flixel.FlxState;
+	import org.flixel.FlxText;
 	
 	
 	public class PlayState extends FlxState
@@ -43,12 +46,16 @@ package com.igwjam
 		override public function update():void
 		{
 			super.update();
+
 			//TODO: update sun movement
+			sun.move();
 			
+			trace("mouse: "+sun.getXPos()+" "+sun.getYPos());
+						
 			//TODO: calculate player sun distance & tan players
 			
 			//TODO: spawn and remove new players 
 		}
-
+		
 	}
 }

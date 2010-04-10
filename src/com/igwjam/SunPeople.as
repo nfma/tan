@@ -15,10 +15,10 @@ package com.igwjam
 		private var targetPosition:int;
 		
 		
-		public const walking = 0;
-		public const tanning = 1;
-		public const leaveHappy = 2;
-		public const leaveAngry = 3;
+		public const walking:int = 0;
+		public const tanning:int = 1;
+		public const leaveHappy:int = 2;
+		public const leaveAngry:int = 3;
 		
 		
 		public function SunPeople(duration:Number, tanMult:Number, targetPos:int)
@@ -33,7 +33,8 @@ package com.igwjam
 			super(0, 150);
 			loadGraphic(ImgSunDude, false, false);
 			
-			state = walking;
+			this.velocity.x = 50.0;
+			this.state = walking;
 		}
 		
 		public function addTan(intensity:Number)
@@ -48,10 +49,13 @@ package com.igwjam
 			switch(state)
 			{
 				case walking:
-					if(this.velocity.x == 0)
-						this.acceleration.x = 20;
-					if(this.velocity.x >= 50)
-						this.acceleration.x = 0;
+					if( this.x >= this.targetPosition ) {
+						this.x = this.targetPosition;
+						this.velocity.x = 0.0;
+						
+						this.state = tanning;
+					}
+						
 					break;
 				case tanning:
 					break;

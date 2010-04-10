@@ -31,7 +31,7 @@ package com.igwjam
 			
 			untilPissOff = duration;
 			
-			super(0, 150);
+			super(0, 380);
 			loadGraphic(ImgSunDude, true, true, 32, 64);
 			
 			
@@ -40,7 +40,7 @@ package com.igwjam
 			addAnimation("leaveHappy", [0, 1, 2], 2, true);
 			addAnimation("leaveAngry", [0, 1, 2], 8, true);
 			
-			this.velocity.x = 100.0;
+			this.velocity.x = 200.0;
 			this.beachState = walking;
 			play("walk");
 		}
@@ -78,6 +78,7 @@ package com.igwjam
 				case walking:
 					if( this.x >= this.targetPosition ) {
 						this.x = this.targetPosition;
+						this.y = 340;
 						this.velocity.x = 0.0;
 						
 						this.timeToLeave = timeSinceStart + this.untilPissOff;
@@ -91,7 +92,8 @@ package com.igwjam
 					this.timeSinceTanning += FlxG.elapsed;
 					if( this.tan > 1.2 )
 					{
-						this.velocity.x = 100.0;
+						this.velocity.x = 250.0;
+						this.y = 380;
 						this.beachState = leaveAngry;
 						//TODO: make an angry animation 
 						play("leaveAngry");
@@ -100,14 +102,16 @@ package com.igwjam
 					{
 						if (this.tan > 0.7 && this.tan < 1.0)
 						{
-							this.velocity.x = 50.0;
+							this.velocity.x = 200.0;
+							this.y = 380;
 							this.beachState = leaveHappy;
 							//TODO: make an happy animation 
 							play("leaveHappy");
 						}
 						else
 						{
-							this.velocity.x = 100.0;
+							this.velocity.x = 250.0;
+							this.y = 380;
 							this.beachState = leaveAngry;
 							//TODO: make an angry animation 
 							play("leaveAngry");

@@ -14,6 +14,7 @@ package com.igwjam
 		private var beachState:int;
 		private var tanMultiplier:Number;
 		private var targetPosition:int;
+		private var tanText:FlxText;
 		
 		
 		public static const walking:int = 0;
@@ -34,6 +35,13 @@ package com.igwjam
 			super(0, 150);
 			loadGraphic(ImgSunDude, true, true, 32, 64);
 			
+			tanText = new FlxText(0, 10,FlxG.width);
+			tanText.color = 0x000000;
+			tanText.size = 8;
+			tanText.alignment = "left";
+			//score.scrollFactor = ssf;
+			tanText.text = tan.toString();
+			
 			
 			addAnimation("idle", [0]);
 			addAnimation("walk", [0, 1, 2], 4, true);
@@ -49,6 +57,8 @@ package com.igwjam
 		public function tanUsingThe(sunXPosition:Number, sunYPosition:Number):void
 		{
 			tan += calculateIntensityWith(sunXPosition, sunXPosition) * tanMultiplier;
+			
+			tanText.text = (Math.round(tan*100)/100).toString();
 		}
 		
 		private function calculateIntensityWith(sunXPosition:Number, sunYPosition:Number):Number
@@ -72,6 +82,9 @@ package com.igwjam
 		{
 			//TODO: update statemachine
 			var timeSinceStart:Number = (FlxG.state as PlayState).timeSinceStart;
+			
+			tanText.x = this.x;
+			tanText.y = this.y + this.height;
 			
 			switch(this.beachState)
 			{
@@ -100,6 +113,8 @@ package com.igwjam
 					{
 						if (this.tan > 0.7 && this.tan < 1.0)
 						{
+							FlxG.score += 10;
+							
 							this.velocity.x = 50.0;
 							this.beachState = leaveHappy;
 							//TODO: make an happy animation 
@@ -107,6 +122,8 @@ package com.igwjam
 						}
 						else
 						{
+							FlxG.score -= 20;
+								
 							this.velocity.x = 100.0;
 							this.beachState = leaveAngry;
 							//TODO: make an angry animation 
@@ -129,6 +146,14 @@ package com.igwjam
 			
 			super.update();
 		}
+		
+		override public function render():void
+		{
+			super.render();
+			
+			tanText.render();
+		}	
+
 
 		public function getState():int
 		{

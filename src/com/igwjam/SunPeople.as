@@ -40,7 +40,7 @@ package com.igwjam
 			addAnimation("leaveHappy", [0, 1, 2], 2, true);
 			addAnimation("leaveAngry", [0, 1, 2], 8, true);
 			
-			this.velocity.x = 50.0;
+			this.velocity.x = 100.0;
 			this.beachState = walking;
 			play("walk");
 		}
@@ -55,7 +55,7 @@ package com.igwjam
 		{
 			var intensity:Number = 1 / Math.sqrt(square(distanceBetween(this.x, sunXPosition)) + square(distanceBetween(this.y, sunYPosition)));
 			trace("intensity: " + intensity);
-			return intensity; 
+			return intensity/15.0; 
 		}
 		
 		private function distanceBetween(sun:Number, dude:Number):Number
@@ -89,7 +89,14 @@ package com.igwjam
 					break;
 				case tanning:
 					this.timeSinceTanning += FlxG.elapsed;
-					if(this.timeSinceTanning >= this.timeToLeave)
+					if( this.tan > 1.2 )
+					{
+						this.velocity.x = 100.0;
+						this.beachState = leaveAngry;
+						//TODO: make an angry animation 
+						play("leaveAngry");
+						
+					} else if(this.timeSinceTanning >= this.timeToLeave)
 					{
 						if (this.tan > 0.7 && this.tan < 1.0)
 						{

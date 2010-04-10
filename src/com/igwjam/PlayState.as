@@ -24,9 +24,7 @@ package com.igwjam
 		}
 		
 		override public function create():void
-		{
-			add(new FlxText(0,0,100,"Hello, World!")); //adds a 100px wide text field at position 0,0 (upper left)
-			
+		{			
 			add(sun);
 			FlxG.mouse.show();
 			
@@ -53,7 +51,7 @@ package com.igwjam
 			for ( i = 0; i < 3; i++)	{
 				if( allPeople[i] == null && timeSinceStart - timestampLastSpawn > 5.0 ) {
 					timestampLastSpawn = timeSinceStart;
-					allPeople[i] = new SunPeople(100, 1, 160*(i+1) );
+					allPeople[i] = new SunPeople(10, 1, 160*(i+1) );
 					add(allPeople[i]);
 				}
 			}

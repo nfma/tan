@@ -6,6 +6,7 @@ package com.igwjam
 	import flash.ui.Mouse;
 	
 	import org.flixel.FlxG;
+	import org.flixel.FlxU;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxText;
@@ -57,10 +58,10 @@ package com.igwjam
 			
 			FlxG.score = 0;
 			
-			score = new FlxText(0, 10,FlxG.width);
+			score = new FlxText(FlxG.width-120, 10,100);
 			score.color = 0x000000;
 			score.size = 16;
-			score.alignment = "center";
+			score.alignment = "right";
 			//score.scrollFactor = ssf;
 			score.text = FlxG.score.toString();
 			add(score);
@@ -86,7 +87,7 @@ package com.igwjam
 			for ( i = 0; i < 3; i++)	{
 				if( allPeople[i] == null && timeSinceStart - timestampLastSpawn > 5.0 ) {
 					timestampLastSpawn = timeSinceStart;
-					allPeople[i] = new SunPeople(5, 1, 160*(i+1) );
+					allPeople[i] = new SunPeople((FlxU.random() * 15) + 5, 5, 160*(i+1) );
 					add(allPeople[i]);
 				}
 			}

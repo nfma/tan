@@ -14,7 +14,9 @@ package com.igwjam
 		private var beachState:int;
 		private var tanMultiplier:Number;
 		private var targetPosition:int;
+		
 		private var tanText:FlxText;
+		private var timeToLeaveText:FlxText;
 		
 		
 		public static const walking:int = 0;
@@ -36,11 +38,12 @@ package com.igwjam
 			loadGraphic(ImgSunDude, true, true, 32, 64);
 			
 			tanText = new FlxText(0, 10,FlxG.width);
-			tanText.color = 0x000000;
-			tanText.size = 8;
-			tanText.alignment = "left";
-			//score.scrollFactor = ssf;
+			tanText.setFormat(null, 8, 0x000000, "left");
 			tanText.text = tan.toString();
+			
+			timeToLeaveText = new FlxText(0, 10,FlxG.width);
+			timeToLeaveText.setFormat(null, 8, 0x000000, "left");
+			timeToLeaveText.text = timeToLeave.toString();
 			
 			
 			addAnimation("idle", [0]);
@@ -59,7 +62,7 @@ package com.igwjam
 			if(this.beachState != tanning)
 				return;
 				
-			tan += calculateIntensityWith(sunXPosition, sunXPosition) * tanMultiplier;
+			tan += calculateIntensityWith(sunXPosition, sunYPosition) * tanMultiplier;
 			
 			tanText.text = (Math.round(tan*100)/100).toString();
 		}
@@ -68,7 +71,7 @@ package com.igwjam
 		{
 			var intensity:Number = 1 / Math.sqrt(square(distanceBetween(this.x, sunXPosition)) + square(distanceBetween(this.y, sunYPosition)));
 			trace("intensity: " + intensity);
-			return intensity/15.0; 
+			return square(intensity*20)/20; 	//we want it to be low when the sun is far away and high when it's close sow we square it
 		}
 		
 		private function distanceBetween(sun:Number, dude:Number):Number
@@ -89,6 +92,9 @@ package com.igwjam
 			tanText.x = this.x;
 			tanText.y = this.y + this.height;
 			
+			timeToLeaveText.x = this.x;
+			timeToLeaveText.y = this.y + this.height + 20;
+			
 			switch(this.beachState)
 			{
 				case walking:
@@ -97,15 +103,15 @@ package com.igwjam
 						this.y = 340;
 						this.velocity.x = 0.0;
 						
-						this.timeToLeave = timeSinceStart + this.untilPissOff;
-						this.timeSinceTanning = 0;
-						
 						play("idle");		//TODO: call the crouching and lying down animation here 
 						this.beachState = tanning;
 					}
 					break;
 				case tanning:
 					this.timeSinceTanning += FlxG.elapsed;
+					
+					timeToLeaveText.text = ( Math.round((untilPissOff - timeSinceTanning)*100)/100 ).toString();
+					
 					if( this.tan > 1.2 )
 					{
 						this.velocity.x = 250.0;
@@ -115,7 +121,7 @@ package com.igwjam
 						//TODO: make an angry animation 
 						play("leaveAngry");
 						
-					} else if(this.timeSinceTanning >= this.timeToLeave)
+					} else if(this.timeSinceTanning >= untilPissOff)
 					{
 						if (this.tan > 0.7 && this.tan < 1.0)
 						{
@@ -161,6 +167,8 @@ package com.igwjam
 			super.render();
 			
 			tanText.render();
+			
+			timeToLeaveText.render();
 		}	
 
 

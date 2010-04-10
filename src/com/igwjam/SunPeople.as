@@ -7,10 +7,11 @@ package com.igwjam
 		[Embed(source="../resources/walking_dude.png")] private var ImgSunDude:Class;
 		
 		
-		private var timeToLeave:Number;
+		private var timeToLeave:Number = 0;
+		private var timeSinceTanning:Number = 0;
 		private var untilPissOff:Number;
 		private var tan:Number;
-		private var state:int;
+		private var beachState:int;
 		private var tanMultiplier:Number;
 		private var targetPosition:int;
 		
@@ -19,12 +20,12 @@ package com.igwjam
 		public const tanning:int = 1;
 		public const leaveHappy:int = 2;
 		public const leaveAngry:int = 3;
+		public const terminated:int = 4;
 		
 		
 		public function SunPeople(duration:Number, tanMult:Number, targetPos:int)
 		{
 			tan = 0;
-			timeToLeave = 0; //doesnt work like this because elapsed is time since last FRAME! FlxG.elapsed + untilPissOff;
 			tanMultiplier = tanMult;
 			targetPosition = targetPos;
 			
@@ -32,10 +33,13 @@ package com.igwjam
 			
 			super(0, 150);
 			loadGraphic(ImgSunDude, true, true, 32, 64);
+			
+			
+			addAnimation("idle", [0]);
 			addAnimation("walk", [0, 1, 2], 4, true);
 			
 			this.velocity.x = 50.0;
-			this.state = walking;
+			this.beachState = walking;
 			play("walk");
 		}
 		
@@ -47,22 +51,45 @@ package com.igwjam
 		override public function update():void
 		{
 			//TODO: update statemachine
+			var timeSinceStart = (FlxG.state as PlayState).timeSinceStart;
 			
-			switch(state)
+			switch(this.beachState)
 			{
 				case walking:
 					if( this.x >= this.targetPosition ) {
 						this.x = this.targetPosition;
 						this.velocity.x = 0.0;
 						
-						this.state = tanning;
+						this.timeToLeave = timeSinceStart + this.untilPissOff;
+						this.timeSinceTanning = 0;
+						
+						play("idle");		//TODO: call the crouching and lying down animation here 
+						this.beachState = tanning;
 					}
 					break;
 				case tanning:
+					this.timeSinceTanning += FlxG.elapsed;
+					if(this.timeSinceTanning >= this.timeToLeave)
+					{
+						this.velocity.x = 50.0;
+						if (this.tan > 0.7 && this.tan < 1.0)
+						{
+							this.beachState = leaveHappy;
+							play("leaveHappy");
+						}
+						else
+						{
+							this.beachState = leaveAngry;
+							play("leaveAngry");
+						}
+					}
 					break;
 				case leaveHappy:
-					break;
 				case leaveAngry:
+					if(this.x > FlxG.width + 0.1 * FlxG.width)		//add a little extra buffer so we are sure he/she is out of screen
+					{
+						this.beachState = terminated;
+					}
 					break;
 					
 //				default:
@@ -72,7 +99,15 @@ package com.igwjam
 			super.update();
 		}
 
+		public function getState():int
+		{
+			return this.beachState;
+		}
 		
+		public function setState(state:int): void
+		{
+			this.beachState = state;
+		}
 
 	}
 }

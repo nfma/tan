@@ -16,6 +16,7 @@ package com.igwjam
 		private var allPeople:Array;
 		
 		public var timeSinceStart:Number = 0.0;
+		private var timestampLastSpawn:Number = 0.0;
 		
 		
 		public function PlayState()
@@ -30,7 +31,7 @@ package com.igwjam
 			add(sun);
 			FlxG.mouse.show();
 			
-			allPeople = new Array();
+			allPeople = new Array(null, null, null);
 			var tempDude:SunPeople;
 			
 			tempDude = new SunPeople(100, 1, 100);
@@ -50,7 +51,26 @@ package com.igwjam
 			this.timeSinceStart += FlxG.elapsed;
 			
 			super.update();
+			
+			//remove player who has left			
+			for ( var i:int = 0; i < 3; i++)	{
+				if( allPeople[i] != null ) {
+					if( (allPeople[i] as SunPeople).getState() == SunPeople.terminated ) {
+						delete allPeople[i];
+						allPeople[i] = null;
+					}
+				}
+			}
 
+			//spawn new player
+			for ( i = 0; i < 3; i++)	{
+				if( allPeople[i] == null && timeSinceStart - timestampLastSpawn < 5.0 ) {
+					timestampLastSpawn = timeSinceStart;
+					allPeople[i] = new SunPeople(100, 1, 160*(i+1) );
+				}
+			}
+		
+			
 			//TODO: update sun movement
 			sun.move();
 			
@@ -58,7 +78,7 @@ package com.igwjam
 						
 			//TODO: calculate player sun distance & tan players
 			
-			//TODO: spawn and remove new players 
+			
 		}
 		
 	}

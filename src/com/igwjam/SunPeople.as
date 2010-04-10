@@ -16,11 +16,11 @@ package com.igwjam
 		private var targetPosition:int;
 		
 		
-		public const walking:int = 0;
-		public const tanning:int = 1;
-		public const leaveHappy:int = 2;
-		public const leaveAngry:int = 3;
-		public const terminated:int = 4;
+		public static const walking:int = 0;
+		public static const tanning:int = 1;
+		public static const leaveHappy:int = 2;
+		public static const leaveAngry:int = 3;
+		public static const terminated:int = 4;
 		
 		
 		public function SunPeople(duration:Number, tanMult:Number, targetPos:int)
@@ -43,7 +43,7 @@ package com.igwjam
 			play("walk");
 		}
 		
-		public function addTan(intensity:Number)
+		public function addTan(intensity:Number):void
 		{
 			tan += intensity * tanMultiplier;
 		}
@@ -51,7 +51,7 @@ package com.igwjam
 		override public function update():void
 		{
 			//TODO: update statemachine
-			var timeSinceStart = (FlxG.state as PlayState).timeSinceStart;
+			var timeSinceStart:Number = (FlxG.state as PlayState).timeSinceStart;
 			
 			switch(this.beachState)
 			{

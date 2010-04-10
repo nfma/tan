@@ -6,6 +6,7 @@ package com.igwjam
 	import flash.ui.Mouse;
 	
 	import org.flixel.FlxG;
+	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxText;
 	
@@ -18,6 +19,13 @@ package com.igwjam
 		public var timeSinceStart:Number = 0.0;
 		private var timestampLastSpawn:Number = 0.0;
 		
+		private var eveSky:FlxSprite;
+
+		[Embed(source="../../../resources/midsky.png")] private var ImgMidSky:Class;
+		[Embed(source="../../../resources/evesky.png")] private var ImgEveSky:Class;
+		[Embed(source="../../../resources/beach.png")] private var ImgBeach:Class;
+		[Embed(source="../../../resources/water.png")] private var ImgWater:Class;
+		
 		protected var score:FlxText;
 
 		public function PlayState()
@@ -26,9 +34,24 @@ package com.igwjam
 		}
 		
 		override public function create():void
-		{			
+		{		
+			
+			var midsky:FlxSprite = new FlxSprite(0,0,ImgMidSky);
+			add(midsky);
+			
+			eveSky = new FlxSprite(0,0,ImgEveSky);
+			eveSky.alpha = 0.0;
+			add(eveSky)
+			
 			add(sun);
 			FlxG.mouse.show();
+			
+			var water:FlxSprite = new FlxSprite(0,0,ImgWater);
+			add(water);
+			
+			var beach:FlxSprite = new FlxSprite(0,0,ImgBeach);
+			add(beach);			
+
 			
 			allPeople = new Array(null, null, null)
 			
@@ -72,15 +95,14 @@ package com.igwjam
 			//TODO: update sun movement
 			sun.move();
 			
-			trace(allPeople.length);
-			
+			eveSky.alpha = Math.sin(sun.y/208.0*(Math.PI/2.0));
+			trace(eveSky.alpha);
+						
 			//tan players
 			for each(var dude:SunPeople in allPeople) {
 				if(dude != null)
 					dude.tanUsingThe(sun.xPos, sun.yPos);
 			}
-
-			trace("mouse: "+sun.xPos+" "+sun.yPos);
 						
 
 			score.text = FlxG.score.toString();

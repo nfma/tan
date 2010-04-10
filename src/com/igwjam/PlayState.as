@@ -17,7 +17,7 @@ package com.igwjam
 		
 		public var timeSinceStart:Number = 0.0;
 		private var timestampLastSpawn:Number = 0.0;
-		
+
 		public function PlayState()
 		{
 			super();

@@ -18,17 +18,17 @@ package com.igwjam
 		
 		public function Sun()
 		{	
-			super(0,0,ImgSun);
+			super(0,0,ImgSun);		
 		}
 		
-		public function getXPos():int
+		public function get xPos():Number
 		{
-			return this.x + this.radius;
+			return positionUnderBorder(this.x, FlxG.width);
 		}
 
-		public function getYPos():int
+		public function get yPos():Number
 		{
-			return this.y + this.radius;
+			return positionUnderBorder(this.y, FlxG.height);
 		}
 		
 		public function move():void
@@ -53,10 +53,10 @@ package com.igwjam
 			else if(mouse.pressed())
 			{			
 				var newX:int = mouseX-this.mXOff;
-				this.x = Math.max(0,Math.min(newX,FlxG.width-64));
+				this.x = positionUnderBorder(newX, FlxG.width);
 				
 				var newY:int = mouseY-this.mYOff;
-				this.y = Math.max(0,Math.min(newY,FlxG.height-64));
+				this.y = positionUnderBorder(newY, FlxG.height);
 				
 			}
 			else if(mouse.justReleased())
@@ -65,6 +65,11 @@ package com.igwjam
 				FlxG.mouse.show();
 			}
 			
+		}
+		
+		private function positionUnderBorder(pos:Number, axis:Number):Number
+		{
+			return Math.max(0,Math.min(pos, axis - this.radius * 2));
 		}
 		
 		

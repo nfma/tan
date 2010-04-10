@@ -18,7 +18,6 @@ package com.igwjam
 		public var timeSinceStart:Number = 0.0;
 		private var timestampLastSpawn:Number = 0.0;
 		
-		
 		public function PlayState()
 		{
 			super();
@@ -33,7 +32,7 @@ package com.igwjam
 			
 			allPeople = new Array(null, null, null)
 		}
-
+		
 		override public function update():void
 		{
 			this.timeSinceStart += FlxG.elapsed;
@@ -63,13 +62,17 @@ package com.igwjam
 			//TODO: update sun movement
 			sun.move();
 			
-			trace("mouse: "+sun.getXPos()+" "+sun.getYPos());
-						
+			trace(allPeople.length);
+			
 			//tan players
-			for ( i = 0; i < 3; i++)	{
-				if( allPeople[i] != null )
-					(allPeople[i] as SunPeople).addTan(sun.x);
+			for each(var dude:SunPeople in allPeople) {
+				dude.tanUsingThe(sun.xPos, sun.yPos);
 			}
+
+			trace("mouse: "+sun.xPos+" "+sun.yPos);
+						
+
+
 			
 		}
 		

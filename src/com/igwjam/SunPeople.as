@@ -45,9 +45,27 @@ package com.igwjam
 			play("walk");
 		}
 		
-		public function addTan(intensity:Number):void
+
+		public function tanUsingThe(sunXPosition:Number, sunYPosition:Number):void
 		{
-			tan += intensity * tanMultiplier;
+			tan += calculateIntensityWith(sunXPosition, sunXPosition) * tanMultiplier;
+		}
+		
+		private function calculateIntensityWith(sunXPosition:Number, sunYPosition:Number):Number
+		{
+			var intensity:Number = 1 / Math.sqrt(square(distanceBetween(this.x, sunXPosition)) + square(distanceBetween(this.y, sunYPosition)));
+			trace("intensity: " + intensity);
+			return intensity; 
+		}
+		
+		private function distanceBetween(sun:Number, dude:Number):Number
+		{
+			return Math.abs(sun - dude);
+		}
+		
+		private function square(number:Number):Number 
+		{
+			return number * number;
 		}
 		
 		override public function update():void

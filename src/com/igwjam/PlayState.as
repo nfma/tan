@@ -32,17 +32,6 @@ package com.igwjam
 			FlxG.mouse.show();
 			
 			allPeople = new Array(null, null, null);
-			var tempDude:SunPeople;
-			
-			tempDude = new SunPeople(100, 1, 100);
-			add(tempDude);
-
-//			for (var i:int = 0; i < 3; i++)
-//			{
-//				tempDude = new SunPeople(100 * i, 1 * i, 100 * i);
-//				allPeople.push(tempDude);
-//				add(tempDude);
-//			}
 			
 		}
 
@@ -64,9 +53,10 @@ package com.igwjam
 
 			//spawn new player
 			for ( i = 0; i < 3; i++)	{
-				if( allPeople[i] == null && timeSinceStart - timestampLastSpawn < 5.0 ) {
+				if( allPeople[i] == null && timeSinceStart - timestampLastSpawn > 5.0 ) {
 					timestampLastSpawn = timeSinceStart;
 					allPeople[i] = new SunPeople(100, 1, 160*(i+1) );
+					add(allPeople[i]);
 				}
 			}
 		
@@ -76,8 +66,11 @@ package com.igwjam
 			
 			trace("mouse: "+sun.getXPos()+" "+sun.getYPos());
 						
-			//TODO: calculate player sun distance & tan players
-			
+			//tan players
+			for ( i = 0; i < 3; i++)	{
+				if( allPeople[i] != null )
+					(allPeople[i] as SunPeople).addTan(sun.x);
+			}
 			
 		}
 		

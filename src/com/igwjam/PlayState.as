@@ -15,6 +15,8 @@ package com.igwjam
 		private var sun:Sun = new Sun;
 		private var allPeople:Array;
 		
+		public var timeSinceStart:Number = 0.0;
+		
 		
 		public function PlayState()
 		{
@@ -45,6 +47,8 @@ package com.igwjam
 
 		override public function update():void
 		{
+			this.timeSinceStart += FlxG.elapsed;
+			
 			super.update();
 
 			//TODO: update sun movement

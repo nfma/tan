@@ -15,12 +15,8 @@ package com.igwjam
 		private var sun:Sun = new Sun;
 		private var allPeople:Array;
 		
-<<<<<<< Updated upstream
 		public var timeSinceStart:Number = 0.0;
 		
-		
-=======
->>>>>>> Stashed changes
 		public function PlayState()
 		{
 			super();

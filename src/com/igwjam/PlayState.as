@@ -34,10 +34,10 @@ package com.igwjam
 			
 			FlxG.score = 0;
 			
-			score = new FlxText(0, 10,FlxG.width);
+			score = new FlxText(FlxG.width-120, 10,100);
 			score.color = 0x000000;
 			score.size = 16;
-			score.alignment = "center";
+			score.alignment = "right";
 			//score.scrollFactor = ssf;
 			score.text = FlxG.score.toString();
 			add(score);

@@ -59,7 +59,7 @@ package com.igwjam
 			if(this.beachState != tanning)
 				return;
 				
-			tan += calculateIntensityWith(sunXPosition, sunXPosition) * tanMultiplier;
+			tan += calculateIntensityWith(sunXPosition, sunYPosition) * tanMultiplier;
 			
 			tanText.text = (Math.round(tan*100)/100).toString();
 		}
@@ -68,7 +68,7 @@ package com.igwjam
 		{
 			var intensity:Number = 1 / Math.sqrt(square(distanceBetween(this.x, sunXPosition)) + square(distanceBetween(this.y, sunYPosition)));
 			trace("intensity: " + intensity);
-			return intensity/15.0; 
+			return square(intensity*20)/20; 
 		}
 		
 		private function distanceBetween(sun:Number, dude:Number):Number

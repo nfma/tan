@@ -97,7 +97,7 @@ package com.igwjam
 				for ( i = 0; i < numberOfPeople; i++)	{
 					if( allPeople[i] == null && timeSinceStart - timestampLastSpawn > 5.0 ) {
 						timestampLastSpawn = timeSinceStart;
-						allPeople[i] = new SunPeople((FlxU.random() * 20) + 7, 5, 160*(i+1) );		//tanMult: (FlxU.random() * 4) + 4
+						allPeople[i] = new SunPeople((FlxU.random() * 20) + 7, 5, 160*(i+1), 1);		//tanMult: (FlxU.random() * 4) + 4
 						add(allPeople[i]);
 					}
 				}

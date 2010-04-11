@@ -20,6 +20,8 @@ package com.igwjam
 		private var timeToLeaveClock:FlxSprite = null;
 		private var scoreAtPosition:ScoreText;
 		
+		private var difficultyLevel:Number;
+		
 		
 		public static const walking:int = 0;
 		public static const tanning:int = 1;
@@ -28,8 +30,9 @@ package com.igwjam
 		public static const terminated:int = 4;
 		
 		
-		public function SunPeople(duration:Number, tanMult:Number, targetPos:int)
+		public function SunPeople(duration:Number, tanMult:Number, targetPos:int, difficultyLevel:Number)
 		{
+			this.difficultyLevel = difficultyLevel; 
 			tan = 0;
 			tanMultiplier = tanMult;
 			targetPosition = targetPos;
@@ -79,9 +82,18 @@ package com.igwjam
 			var yDistance:Number = distanceBetween(240, sun.top);		//sun.y because that's the top left corner...and we want the top!
 			
 			var intensity:Number = (1/(xDistance*50)) * yDistance/240;
-
-
-			return intensity; 	//we want it to be low when the sun is far away and high when it's close sow we square it
+//			return intensity;
+			return calculateIntensityForX(sun) * calculateIntensityForY(sun) * difficultyLevel;
+		}
+		
+		private function calculateIntensityForX(sun:Sun):Number
+		{
+			return Math.max(0, 0.025 - (distanceBetween(sun.centerX, centerX) / 19200));
+		}
+		
+		private function calculateIntensityForY(sun:Sun):Number
+		{
+			return 0.025 - sun.centerY * 0.025 / 272;
 		}
 		
 		private function distanceBetween(sun:Number, dude:Number):Number

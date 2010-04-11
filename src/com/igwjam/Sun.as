@@ -21,16 +21,6 @@ package com.igwjam
 			super(0,0,ImgSun);		
 		}
 		
-		public function get xPos():Number
-		{
-			return positionUnderBorder(this.x, FlxG.width);
-		}
-
-		public function get yPos():Number
-		{
-			return positionUnderBorder(this.y, FlxG.height);
-		}
-		
 		public function move():void
 		{
 			var mouseX:int = org.flixel.FlxG.mouse.x;

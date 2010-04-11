@@ -65,7 +65,7 @@ package com.igwjam
 			//if the sun is below the horizon, which means it's night we go home
 			if (sun.top >= 240)
 			{
-				untilPissOff = timeSinceTanning;
+				untilPissOff = timeTanning;
 			}	
 				
 			tan += calculateIntensityWith(sun) * tanMultiplier;
@@ -105,7 +105,7 @@ package com.igwjam
 			}
 			else
 			{
-				scoreAtPosition.text = "-" + score;
+				scoreAtPosition.text = score.toString();
 				scoreAtPosition.color = 0x991100;
 			}
 			scoreAtPosition.centerX = centerX;
@@ -155,7 +155,9 @@ package com.igwjam
 					{
 						this.velocity.x = 250.0;
 						this.y = 380;
-						FlxG.score -= 20;
+						FlxG.score -= 10;
+						showScore(-10);
+
 						this.beachState = leaveAngry;
 						//TODO: make an angry animation 
 						play("leaveAngry");
@@ -179,7 +181,7 @@ package com.igwjam
 							this.velocity.x = 250.0;
 							this.y = 380;
 							
-							FlxG.score -= 20;
+							FlxG.score -= 10;
 							
 							showScore(-10);
 							

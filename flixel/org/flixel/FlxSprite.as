@@ -91,6 +91,10 @@ package org.flixel
 		protected var _ct:ColorTransform;
 		protected var _mtx:Matrix;
 		
+		//TAN
+		protected var _originalExtents:FlxPoint;
+		//TAN end
+		
 		/**
 		 * Creates a white 8x8 square <code>FlxSprite</code> at the specified position.
 		 * Optionally can load a simple, one-frame graphic instead.
@@ -131,6 +135,10 @@ package org.flixel
 
 			_mtx = new Matrix();
 			_callback = null;
+			
+			//TAN
+			_originalExtents = new FlxPoint(width, height);
+			//TAN end
 		}
 		
 		/**
@@ -653,5 +661,15 @@ package org.flixel
 		{
 			_pixels = _framePixels = Pixels;
 		}
+		
+		//TAN
+		public function scaleAndUpdate(scaleX:Number, scaleY:Number):void
+		{
+			scale = new FlxPoint(scaleX, scaleY);
+			//manually update the extents because Flixel doesn't do it
+			width = _originalExtents.x * scaleX;
+			height = _originalExtents.y * scaleY;
+		}
+		//TAN end
 	}
 }

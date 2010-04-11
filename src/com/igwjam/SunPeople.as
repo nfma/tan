@@ -11,6 +11,8 @@ package com.igwjam
 		[Embed(source="../resources/walk_body.png")] private var ImgWalkBody:Class;
 		
 		[Embed(source="../resources/clock.png")] private var ImgClock:Class;
+		
+		[Embed(source="../resources/Sniglet.ttf",fontFamily="score")] protected var scoreFont:String;
 
 		
 		private var timeToLeave:Number = 0;
@@ -66,8 +68,9 @@ package com.igwjam
 			walkSkinSprite.addAnimation("leaveHappy", [0, 1, 2,3], 2, true);
 			walkSkinSprite.addAnimation("leaveAngry", [0, 1, 2,3], 8, true);
 			
-			scoreAtPosition = new ScoreText(1,0,0, 100, "");
-			scoreAtPosition.setFormat(null,20,0x119900, "center");
+
+			scoreAtPosition = new ScoreText(1,0,0, 200, "");
+			scoreAtPosition.setFormat("score", 80, 0x119900, "center");
 			
 			this.velocity.x = 200.0;
 			walkSkinSprite.velocity.x = 200.0;
@@ -136,7 +139,7 @@ package com.igwjam
 				scoreAtPosition.color = 0x991100;
 			}
 			scoreAtPosition.centerX = centerX;
-			scoreAtPosition.centerY = centerY - height;
+			scoreAtPosition.centerY = centerY;
 			scoreAtPosition.revive();
 		}
 		
@@ -181,8 +184,6 @@ package com.igwjam
 					
 						FlxG.state.add(timeToLeaveClock);
 						
-						trace(untilPissOff/17.0);
-						
 						timeToLeaveClock.play("clock_running");	
 					}
 										
@@ -202,16 +203,17 @@ package com.igwjam
 						play("leaveAngry");
 						walkSkinSprite.play("leaveAngry");
 						
-					} else if(this.timeTanning >= untilPissOff)
+					} 
+					else if(this.timeTanning >= untilPissOff)
 					{
 						if (this.tan >= 0.0 && this.tan < 1.01)
 						{
 							this.velocity.x = 200.0;
 							walkSkinSprite.velocity.x = 200.0;
 							
-							var thisScore:int = FlxU.mapValues(this.tan, 0, 1.01, 0, 10, true);
+							var thisScore:int = FlxU.mapValues(this.tan, 0, 1.01, -5, 10, true);
 							
-							if(tan >= 1)
+							if(tan >= 0.9)
 								thisScore *= 2;
 								
 							FlxG.score += thisScore;

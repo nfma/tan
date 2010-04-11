@@ -27,11 +27,14 @@ package com.igwjam
 		[Embed(source="../../../resources/beach.png")] private var ImgBeach:Class;
 		[Embed(source="../../../resources/water.png")] private var ImgWater:Class;
 		
+		[Embed(source="../resources/Sniglet.ttf",fontFamily="score")] protected var scoreFont:String;
+		
 		protected var score:FlxText;
 
-		public function PlayState()
+		public function PlayState(difficultyLevel:Number)
 		{
 			super();
+			this.difficultyLevel = difficultyLevel;
 		}
 		
 		override public function create():void
@@ -70,13 +73,10 @@ package com.igwjam
 			FlxG.score = 0;
 			
 			score = new FlxText(FlxG.width-120, 10,100);
-			score.color = 0x000000;
-			score.size = 16;
-			score.alignment = "right";
+			score.setFormat();
+			score.setFormat("score", 46, 0x000000, "right");
 			score.text = FlxG.score.toString();
 			add(score);
-			
-			this.difficultyLevel = 3;
 		}
 		
 		override public function update():void
@@ -123,9 +123,7 @@ package com.igwjam
 				//it's day so make it light again
 				nightSky.alpha -= 0.01;
 			}
-			
-//			trace(eveSky.alpha);
-						
+									
 			//tan players
 			for each(var dude:SunPeople in allPeople) {
 				if(dude != null)

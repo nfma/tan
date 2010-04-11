@@ -294,7 +294,7 @@ package com.igwjam
 				return FlxU.RGBtoHEX(255,red-50,red-20);
 			} 
 			else {
-				return FlxU.RGBtoHEX(210,red / 2+40, red/2+10 );
+				return FlxU.RGBtoHEX(210, red * 0.8, red *0.7 );
 			}	
 		}
 		

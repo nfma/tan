@@ -31,7 +31,6 @@ package com.igwjam
 			var beach:FlxSprite = new FlxSprite(0,0,ImgBeach);
 			add(beach);			
 			
-			
 			var title:FlxText = new FlxText(130, 140, 400, "Sun of a Beach");
 			title.color = 0xAA0000FF;
 			title.size = 60;

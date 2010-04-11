@@ -13,6 +13,12 @@ package com.igwjam
 		private var allPeople:Array;
 		private var numberOfPeople:Number;
 		
+		private var peopleCount:int = 0;
+		private var peoplePerLevel:int = 10;
+		
+		private var levelFinished:Boolean = false;
+		private var finishTime:Number = 0;
+		
 		public var timeSinceStart:Number = 0.0;
 		private var timestampLastSpawn:Number = -10.0;	//so they start spawning right away
 		
@@ -29,7 +35,11 @@ package com.igwjam
 		
 		[Embed(source="../resources/Sniglet.ttf",fontFamily="score")] protected var scoreFont:String;
 		
+		[Embed(source="../resources/music.mp3")] private var BgMusic:Class;
+		
+		
 		protected var score:FlxText;
+		protected var finalScore:FlxText;
 
 		public function PlayState(difficultyLevel:Number)
 		{
@@ -73,10 +83,15 @@ package com.igwjam
 			FlxG.score = 0;
 			
 			score = new FlxText(FlxG.width-120, 10,100);
-			score.setFormat();
 			score.setFormat("score", 46, 0x000000, "right");
 			score.text = FlxG.score.toString();
 			add(score);
+			
+			finalScore = new FlxText(0, FlxG.height/2 - 100, FlxG.width);
+			finalScore.setFormat("score", 80, 0x009900, "center");
+			
+			//play some bg music
+			FlxG.playMusic(BgMusic);
 		}
 		
 		override public function update():void
@@ -85,7 +100,15 @@ package com.igwjam
 			
 			super.update();
 			
-			//remove player who has left			
+			if(levelFinished)
+			{
+				if (this.timeSinceStart > finishTime + 5)
+					FlxG.state = new MenuState();
+				return;
+			}
+			
+			//remove player who has left		
+			var nullCount:int = 0;	
 			for ( var i:int = 0; i < numberOfPeople; i++)	{
 				if( allPeople[i] != null ) {
 					if( (allPeople[i] as SunPeople).getState() == SunPeople.terminated ) {
@@ -93,16 +116,29 @@ package com.igwjam
 						allPeople[i] = null;
 					}
 				}
+				else if (peopleCount > peoplePerLevel)
+				{
+					nullCount++;
+				}
+			}
+			
+			if(peopleCount > peoplePerLevel && nullCount == numberOfPeople)
+			{
+				levelFinished = true;
+				finishTime = timeSinceStart;
+				finalScore.text = "Final Score:\n" + FlxG.score.toString();
+				add(finalScore);
 			}
 
 			//spawn new player
-			if(sun.top < 220)		//no people will come when it's evening!
+			if(sun.top < 220 && peopleCount <= peoplePerLevel)		//no people will come when it's evening!
 			{
 				for ( i = 0; i < numberOfPeople; i++)	{
 					if( allPeople[i] == null && timeSinceStart - timestampLastSpawn > (5.0 /this.difficultyLevel) ) {
 						timestampLastSpawn = timeSinceStart;
 						allPeople[i] = new SunPeople(((FlxU.random() * 20) + 7) * (1 / this.difficultyLevel), 5, 160*(i+1), this.difficultyLevel);
 						add(allPeople[i]);
+						peopleCount++;
 					}
 				}
 			}

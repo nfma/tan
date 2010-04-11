@@ -10,6 +10,7 @@ package com.igwjam
 	{
 		[Embed(source="../../../resources/sun.png")] private var ImgSun:Class;
 			[Embed(source="../../../resources/sunEyes.png")] private var ImgSunEyes:Class;
+				[Embed(source="../../../resources/sunRadiance.png")] private var ImgSunRadiance:Class;
 		
 		// mouse offsets
 		private var mXOff:int = 0;
@@ -20,12 +21,19 @@ package com.igwjam
 		private var originalExtents:FlxPoint;
 		
 		private var eyes:FlxSprite;
+		private var sunRadiance:FlxSprite;
+		
+		private var radiate:Boolean;
 		
 		public function Sun()
 		{	
 			super(0,0,ImgSun);	
 
 			eyes = new FlxSprite(0,0,ImgSunEyes);
+			sunRadiance = new FlxSprite(0,0,ImgSunRadiance);
+			sunRadiance.alpha = 0;
+			radiate = false;
+			
 			
 			originalExtents = new FlxPoint(width, height);
 			
@@ -77,16 +85,37 @@ package com.igwjam
 		{
 			var sunHeight:Number = Math.min(top, 240)/240;
 			
-			//scale the sun itself
-			var scaleFactor:Number = FlxU.mapValues(sunHeight, 0, 1, 1, 1.7, true);
-			scaleAndUpdate(scaleFactor, scaleFactor);
 			
-			//and color it
-			var greenNBlue:int = FlxU.mapValues(sunHeight, 0, 1, 255, 0, true);
-			var sunColors:Array = FlxU.HEXtoRGB(color);
-			color = FlxU.RGBtoHEX(sunColors[0], greenNBlue, greenNBlue);
+			if(FlxG.state is PlayState)
+			{
+				// show some hot radiance if we are high up in the sky
+				if (sunHeight < 0.2)
+				{
+					radiate = true;
+					var factor:Number = Math.sin( (FlxG.state as PlayState).timeSinceStart * 2 );
+					var scaleFactor = FlxU.mapValues(factor, 0, 1, 1.0, 1.7, true);
+					sunRadiance.scale = new FlxPoint(scaleFactor, scaleFactor);
+					sunRadiance.alpha = FlxU.mapValues(factor, 0, 1, 0.0, 0.5, true) * (1-sunHeight/0.2);		//we want it to slowly fadeout the lower the sun is
+					sunRadiance.x = x;
+					sunRadiance.y = y;
+				}
+				else
+				{
+					radiate = false;
+				}
+				
+				//scale the sun itself
+				var scaleFactor:Number = FlxU.mapValues(sunHeight, 0, 1, 1, 0.7, true);
+				scaleAndUpdate(scaleFactor, scaleFactor);
+				
+				//and color it
+				var greenNBlue:int = FlxU.mapValues(sunHeight, 0, 1, 255, 0, true);
+				var sunColors:Array = FlxU.HEXtoRGB(color);
+				color = FlxU.RGBtoHEX(sunColors[0], greenNBlue, greenNBlue);
+				
+				eyes.scaleAndUpdate(scaleFactor, scaleFactor);
+			}
 			
-			eyes.scaleAndUpdate(scaleFactor, scaleFactor);
 			eyes.x = x;
 			eyes.y = y;
 			
@@ -94,6 +123,9 @@ package com.igwjam
 		
 		override public function render():void
 		{
+			if (radiate)
+				sunRadiance.render();
+				
 			super.render();
 			
 			eyes.render();

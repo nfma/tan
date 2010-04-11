@@ -12,6 +12,7 @@ package com.igwjam
 		
 		[Embed(source="../resources/Sniglet.ttf",fontFamily="title")] protected var scoreFont:String;
 		
+		[Embed(source="../resources/music.mp3")] private var BgMusic:Class;
 				
 		private var levelOne:FlxButton;
 		private var levelTwo:FlxButton;
@@ -42,6 +43,9 @@ package com.igwjam
 			add(createTextInButton("Hard", new FlxButton(410, 345, playWithLevelThree)));
 
 			FlxG.mouse.show();
+			
+			//play some bg music
+			FlxG.playMusic(BgMusic);
 		}
 		
 		private function createTextInButton(text:String, button:FlxButton):FlxButton

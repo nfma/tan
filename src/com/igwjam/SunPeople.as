@@ -6,9 +6,13 @@ package com.igwjam
 	{
 		[Embed(source="../resources/lying_body.png")] private var ImgLyingBody:Class;
 		[Embed(source="../resources/lying_skin.png")] private var ImgLyingSkin:Class;
-		
 		[Embed(source="../resources/walk_skin.png")] private var ImgWalkSkin:Class;
 		[Embed(source="../resources/walk_body.png")] private var ImgWalkBody:Class;
+		
+		[Embed(source="../resources/lying_body_man.png")] private var ImgLyingBodyMan:Class;
+		[Embed(source="../resources/lying_skin_man.png")] private var ImgLyingSkinMan:Class;
+		[Embed(source="../resources/walk_skin_man.png")] private var ImgWalkSkinMan:Class;
+		[Embed(source="../resources/walk_body_man.png")] private var ImgWalkBodyMan:Class;
 		
 		[Embed(source="../resources/clock.png")] private var ImgClock:Class;
 		
@@ -41,6 +45,8 @@ package com.igwjam
 		public static const leaveAngry:int = 3;
 		public static const terminated:int = 4;
 		
+		private var gender:Boolean;
+		
 		
 		public function SunPeople(duration:Number, tanMult:Number, targetPos:int, difficultyLevel:Number)
 		{
@@ -52,10 +58,20 @@ package com.igwjam
 			untilPissOff = duration;
 			
 			super(0, 300);
+		
+			gender = ( Math.round(Math.random()*100) % 2 == 0 )
+			
+				
 			loadGraphic(ImgWalkBody, true, true, 65, 140);
 			
 			walkSkinSprite = new FlxSprite(0,300);
-			walkSkinSprite.loadGraphic(ImgWalkSkin, true, true, 65, 140);
+			if (gender) {
+				loadGraphic(ImgWalkBodyMan, true, true, 65, 140);
+				walkSkinSprite.loadGraphic(ImgWalkSkinMan, true, true, 65, 140);
+			} else {
+				loadGraphic(ImgWalkBody, true, true, 65, 140);
+				walkSkinSprite.loadGraphic(ImgWalkSkin, true, true, 65, 140);
+			}
 			FlxG.state.add(walkSkinSprite);
 			walkSkinSprite.color = this.calculateTanColor();
 			
@@ -160,8 +176,14 @@ package com.igwjam
 						this.alpha = 0.0;
 						walkSkinSprite.alpha = 0.0;
 						
-						lyingBodySprite = new FlxSprite(this.targetPosition-70,340,ImgLyingBody);
-						lyingSkinSprite = new FlxSprite(this.targetPosition-70,340,ImgLyingSkin);
+						if (gender) {
+							lyingBodySprite = new FlxSprite(this.targetPosition-70,340,ImgLyingBodyMan);
+							lyingSkinSprite = new FlxSprite(this.targetPosition-70,340,ImgLyingSkinMan);
+						} else {
+							lyingBodySprite = new FlxSprite(this.targetPosition-70,340,ImgLyingBody);
+							lyingSkinSprite = new FlxSprite(this.targetPosition-70,340,ImgLyingSkin);	
+						}
+
 						
 						//add it to the front of the array, so it is rendered in the background
 						FlxG.state.defaultGroup.members.splice(10,0,lyingSkinSprite,lyingBodySprite);

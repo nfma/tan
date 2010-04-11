@@ -775,6 +775,20 @@ package org.flixel
 		{
 			return target1 + normValues(x, limit1, limit2, crop) * (target2-target1);
 		}
+		
+		//converts a (red,green,blue):Array to a hex:Number
+		static public function RGBtoHEX(r,g,b):Number {
+			return r << 16 | g << 8 | b;
+		}
+		
+		//converts a hex:int to an (red,green,blue):Array
+		static public function HEXtoRGB(hex:int):Array {
+			var red:int = hex >> 16 & 0xFF;
+			var green:int = hex >> 8 & 0xFF;
+			var blue:int = hex & 0xFF;
+			var rgb:Array = [red, green, blue];
+			return rgb;
+		}
 		//TAN end
 		
 	}

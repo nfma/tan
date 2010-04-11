@@ -5,10 +5,11 @@ package com.igwjam
 	public class SunPeople extends FlxSprite
 	{
 		[Embed(source="../resources/walking_dude.png")] private var ImgSunDude:Class;
-		
+		[Embed(source="../resources/clock.png")] private var ImgClock:Class;
+
 		
 		private var timeToLeave:Number = 0;
-		private var timeSinceTanning:Number = 0;
+		private var timeTanning:Number = 0;
 		private var untilPissOff:Number;
 		private var tan:Number;
 		private var beachState:int;
@@ -16,7 +17,7 @@ package com.igwjam
 		private var targetPosition:int;
 		
 		private var tanText:FlxText;
-		private var timeToLeaveText:FlxText;
+		private var timeToLeaveClock:FlxSprite = null;
 		
 		
 		public static const walking:int = 0;
@@ -40,11 +41,6 @@ package com.igwjam
 			tanText = new FlxText(0, 10,FlxG.width);
 			tanText.setFormat(null, 8, 0x000000, "left");
 			tanText.text = tan.toString();
-			
-			timeToLeaveText = new FlxText(0, 10,FlxG.width);
-			timeToLeaveText.setFormat(null, 8, 0x000000, "left");
-			timeToLeaveText.text = timeToLeave.toString();
-			
 			
 			addAnimation("idle", [0]);
 			addAnimation("walk", [0, 1, 2], 4, true);
@@ -91,14 +87,12 @@ package com.igwjam
 		
 		override public function update():void
 		{
-			//TODO: update statemachine
-			var timeSinceStart:Number = (FlxG.state as PlayState).timeSinceStart;
-			
+			//TODO: update statemachine			
 			tanText.x = this.x;
 			tanText.y = this.y + this.height;
 			
-			timeToLeaveText.x = this.x;
-			timeToLeaveText.y = this.y + this.height + 20;
+			//timeToLeaveText.x = this.x;
+			//timeToLeaveText.y = this.y + this.height + 20;
 			
 			switch(this.beachState)
 			{
@@ -113,10 +107,22 @@ package com.igwjam
 					}
 					break;
 				case tanning:
-					this.timeSinceTanning += FlxG.elapsed;
+					this.timeTanning += FlxG.elapsed;
 					
-					timeToLeaveText.text = ( Math.round((untilPissOff - timeSinceTanning)*100)/100 ).toString();
+					if( timeToLeaveClock == null ) {
+						timeToLeaveClock = new FlxSprite();
+						timeToLeaveClock.loadGraphic(ImgClock, true, true, 16, 16);
+						timeToLeaveClock.x = this.x + 8;
+						timeToLeaveClock.y = this.y - 20;
+						timeToLeaveClock.addAnimation( "clock_running", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], (17.0/untilPissOff), false);
 					
+						FlxG.state.add(timeToLeaveClock);
+						
+						trace(untilPissOff/17.0);
+						
+						timeToLeaveClock.play("clock_running");	
+					}
+										
 					if( this.tan > 1.2 )
 					{
 						this.velocity.x = 250.0;
@@ -126,7 +132,7 @@ package com.igwjam
 						//TODO: make an angry animation 
 						play("leaveAngry");
 						
-					} else if(this.timeSinceTanning >= untilPissOff)
+					} else if(this.timeTanning >= untilPissOff)
 					{
 						if (this.tan > 0.7 && this.tan < 1.0)
 						{
@@ -154,6 +160,10 @@ package com.igwjam
 					break;
 				case leaveHappy:
 				case leaveAngry:
+					if( timeToLeaveClock != null ) {
+						FlxG.state.defaultGroup.remove(timeToLeaveClock);
+						timeToLeaveClock = null;
+					}
 					if(this.x > FlxG.width + 0.1 * FlxG.width)		//add a little extra buffer so we are sure he/she is out of screen
 					{
 						this.beachState = terminated;
@@ -173,7 +183,7 @@ package com.igwjam
 			
 			tanText.render();
 			
-			timeToLeaveText.render();
+			//timeToLeaveText.render();
 		}	
 
 

@@ -17,6 +17,7 @@ package com.igwjam
 		
 		private var tanText:FlxText;
 		private var timeToLeaveText:FlxText;
+		private var scoreAtPosition:ScoreText;
 		
 		
 		public static const walking:int = 0;
@@ -50,6 +51,9 @@ package com.igwjam
 			addAnimation("walk", [0, 1, 2], 4, true);
 			addAnimation("leaveHappy", [0, 1, 2], 2, true);
 			addAnimation("leaveAngry", [0, 1, 2], 8, true);
+			
+			scoreAtPosition = new ScoreText(1,0,0, 100, "");
+			scoreAtPosition.setFormat(null,20,0x119900, "center");
 			
 			this.velocity.x = 200.0;
 			this.beachState = walking;
@@ -92,6 +96,25 @@ package com.igwjam
 		private function square(number:Number):Number 
 		{
 			return number * number;
+		}
+		
+		
+		
+		private function showScore(score:Number): void
+		{
+			if(score > 0)
+			{
+				scoreAtPosition.text = "+" + score;
+				scoreAtPosition.color = 0x119900;
+			}
+			else
+			{
+				scoreAtPosition.text = "-" + score;
+				scoreAtPosition.color = 0x991100;
+			}
+			scoreAtPosition.centerX = centerX;
+			scoreAtPosition.centerY = centerY - height;
+			scoreAtPosition.revive();
 		}
 		
 		override public function update():void
@@ -139,6 +162,7 @@ package com.igwjam
 							this.y = 380;
 							
 							FlxG.score += 10;
+							showScore(10);
 							
 							this.beachState = leaveHappy;
 							//TODO: make an happy animation 
@@ -148,7 +172,11 @@ package com.igwjam
 						{
 							this.velocity.x = 250.0;
 							this.y = 380;
+							
 							FlxG.score -= 20;
+							
+							showScore(-10);
+							
 
 							this.beachState = leaveAngry;
 							//TODO: make an angry animation 
@@ -170,6 +198,8 @@ package com.igwjam
 			}
 			
 			super.update();
+			
+			scoreAtPosition.update();
 		}
 		
 		override public function render():void
@@ -179,6 +209,8 @@ package com.igwjam
 			tanText.render();
 			
 			timeToLeaveText.render();
+			
+			scoreAtPosition.render();
 		}	
 
 

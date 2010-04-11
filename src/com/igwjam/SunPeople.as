@@ -57,21 +57,26 @@ package com.igwjam
 		}
 		
 
-		public function tanUsingThe(sunXPosition:Number, sunYPosition:Number):void
+		public function tanUsingThe(sun:Sun):void
 		{
 			if(this.beachState != tanning)
 				return;
 				
-			tan += calculateIntensityWith(sunXPosition, sunYPosition) * tanMultiplier;
+			tan += calculateIntensityWith(sun) * tanMultiplier;
 			
 			tanText.text = (Math.round(tan*100)/100).toString();
 		}
 		
-		private function calculateIntensityWith(sunXPosition:Number, sunYPosition:Number):Number
+		private function calculateIntensityWith(sun:Sun):Number
 		{
-			var intensity:Number = 1 / Math.sqrt(square(distanceBetween(this.x, sunXPosition)) + square(distanceBetween(this.y, sunYPosition)));
-			trace("intensity: " + intensity);
-			return square(intensity*20)/20; 	//we want it to be low when the sun is far away and high when it's close sow we square it
+			var xDistance:Number = Math.max(distanceBetween(this.centerX, sun.centerX), 1);	//we want 1 to be the max intensity!
+			var yDistance:Number = distanceBetween(240, sun.top);		//sun.y because that's the top left corner...and we want the top!
+			
+			var intensity:Number = (1/(xDistance*500)) * yDistance/240;
+
+			/*trace("intensity: " + intensity);*/
+
+			return intensity; 	//we want it to be low when the sun is far away and high when it's close sow we square it
 		}
 		
 		private function distanceBetween(sun:Number, dude:Number):Number

@@ -756,5 +756,26 @@ package org.flixel
 			
 			return hit;
 		}
+		
+		//TAN: use these functions to map valuea to other values
+		static public function normValues(x:Number, limit1:Number, limit2:Number, crop:Boolean):Number
+		{
+			if(crop)
+			{
+				if(x <= limit1)
+					return 0;
+				else if(x >= limit2)
+					return 1;
+			}
+
+			return (x - limit1)/(limit2 - limit1);
+		}
+		
+		static public function mapValues(x:Number, limit1:Number, limit2:Number, target1:Number, target2:Number, crop:Boolean):Number
+		{
+			return target1 + normValues(x, limit1, limit2, crop) * (target2-target1);
+		}
+		//TAN end
+		
 	}
 }

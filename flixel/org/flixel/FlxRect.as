@@ -60,5 +60,17 @@ package org.flixel
 		{
 			return y + height;
 		}
+		
+		//TAN: get center coordinates
+		public function get centerX():Number
+		{
+			return x + width/2;
+		}
+		
+		public function get centerY():Number
+		{
+			return y + height/2;
+		}
+		//TAN end
 	}
 }

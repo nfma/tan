@@ -37,9 +37,9 @@ package com.igwjam
 			title.size = 60;
 			title.alignment = "center";
 			add(title);
-			add(createTextInButton("Level 1", new FlxButton(85, 345, playWithLevelOne)));
-			add(createTextInButton("Level 2", new FlxButton(245, 355, playWithLevelTwo)));
-			add(createTextInButton("Level 3", new FlxButton(410, 345, playWithLevelThree)));
+			add(createTextInButton("Easy", new FlxButton(85, 345, playWithLevelOne)));
+			add(createTextInButton("Medium", new FlxButton(245, 355, playWithLevelTwo)));
+			add(createTextInButton("Hard", new FlxButton(410, 345, playWithLevelThree)));
 
 			FlxG.mouse.show();
 		}

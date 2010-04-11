@@ -9,6 +9,9 @@ package com.igwjam
 		[Embed(source="../../../resources/midsky.png")] private var ImgMidSky:Class;
 		[Embed(source="../../../resources/beach.png")] private var ImgBeach:Class;
 		[Embed(source="../../../resources/water.png")] private var ImgWater:Class;
+		
+		[Embed(source="../resources/Sniglet.ttf",fontFamily="title")] protected var scoreFont:String;
+		
 				
 		private var levelOne:FlxButton;
 		private var levelTwo:FlxButton;
@@ -33,9 +36,7 @@ package com.igwjam
 			
 			
 			var title:FlxText = new FlxText(130, 140, 400, "Sun of a Beach");
-			title.color = 0xAA0000FF;
-			title.size = 60;
-			title.alignment = "center";
+			title.setFormat("title", 60, 0xAA0000FF, "center");
 			add(title);
 			add(createTextInButton("Easy", new FlxButton(85, 345, playWithLevelOne)));
 			add(createTextInButton("Medium", new FlxButton(245, 355, playWithLevelTwo)));
@@ -47,10 +48,8 @@ package com.igwjam
 		private function createTextInButton(text:String, button:FlxButton):FlxButton
 		{
 			
-			var flxText:FlxText = new FlxText(0, 10, 150, text);
-			flxText.color = 0x000000;
-			flxText.size = 16;
-			flxText.alignment = "center";
+			var flxText:FlxText = new FlxText(0, 0, 150, text);
+			flxText.setFormat("title", 30, 0xAA000000, "center");
 			var background:FlxSprite = new FlxSprite(0,0).createGraphic(150,40,0x000000000);
 			button.loadGraphic(background);
 			button.loadText(flxText);

@@ -66,7 +66,7 @@ package com.igwjam
 			walkSkinSprite.addAnimation("leaveHappy", [0, 1, 2,3], 2, true);
 			walkSkinSprite.addAnimation("leaveAngry", [0, 1, 2,3], 8, true);
 			
-			scoreAtPosition = new ScoreText(1,0,0, 100, "");
+			scoreAtPosition = new ScoreText(1,0,0, 200, "");
 			scoreAtPosition.setFormat(null,20,0x119900, "center");
 			
 			this.velocity.x = 200.0;

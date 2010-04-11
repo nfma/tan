@@ -20,8 +20,7 @@ package com.igwjam
 		private var beachState:int;
 		private var tanMultiplier:Number;
 		private var targetPosition:int;
-		
-		private var tanText:FlxText;
+
 		private var timeToLeaveClock:FlxSprite = null;
 		private var scoreAtPosition:ScoreText;
 		
@@ -58,10 +57,6 @@ package com.igwjam
 			FlxG.state.add(walkSkinSprite);
 			walkSkinSprite.color = this.calculateTanColor();
 			
-			tanText = new FlxText(0, 10,FlxG.width);
-			tanText.setFormat(null, 8, 0x000000, "left");
-			tanText.text = tan.toString();
-			
 
 			addAnimation("walk", [0, 1, 2,3], 4, true);
 			addAnimation("leaveHappy", [0, 1, 2,3], 2, true);
@@ -96,7 +91,6 @@ package com.igwjam
 				
 			tan += calculateIntensityWith(sun) * tanMultiplier;
 			
-			tanText.text = (Math.round(tan*100)/100).toString();
 		}
 		
 		private function calculateIntensityWith(sun:Sun):Number
@@ -149,12 +143,7 @@ package com.igwjam
 		override public function update():void
 		{
 			//TODO: update statemachine			
-			tanText.x = this.x;
-			tanText.y = this.y + this.height;
-			
-			//timeToLeaveText.x = this.x;
-			//timeToLeaveText.y = this.y + this.height + 20;
-			
+		
 			switch(this.beachState)
 			{
 				case walking:
@@ -187,7 +176,7 @@ package com.igwjam
 						timeToLeaveClock = new FlxSprite();
 						timeToLeaveClock.loadGraphic(ImgClock, true, true, 16, 16);
 						timeToLeaveClock.x = this.x + 8;
-						timeToLeaveClock.y = this.y - 60;
+						timeToLeaveClock.y = this.y;
 						timeToLeaveClock.addAnimation( "clock_running", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], (17.0/untilPissOff), false);
 					
 						FlxG.state.add(timeToLeaveClock);
@@ -280,8 +269,6 @@ package com.igwjam
 		override public function render():void
 		{
 			super.render();
-			
-			tanText.render();
 			
 			scoreAtPosition.render();
 		}	

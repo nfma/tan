@@ -19,7 +19,9 @@ package com.igwjam
 			
 			alignment = "center";
 			
-			_targetScale = 5.0;
+			antialiasing = true;
+			
+			_targetScale = 2.0;
 			
 			this.revive();
 		}
@@ -28,7 +30,7 @@ package com.igwjam
 			alpha = 0.9;
 			_age = 0;
 			_isAlive = true;
-			this.scale = new FlxPoint(2,2);
+			this.scale = new FlxPoint(1,1);
 //			x += width;
 			y -= height;
 		}
@@ -43,7 +45,7 @@ package com.igwjam
 				_age += FlxG.elapsed;
 				alpha = Math.max(alpha-FlxG.elapsed,0.0);
 				
-				scale = new FlxPoint((_age+1.0)*_targetScale, (_age+1.0)*_targetScale);
+				scale = new FlxPoint(_age*_targetScale + 1.0, _age*_targetScale + 1.0);
 			
 			}			
 			super.update();

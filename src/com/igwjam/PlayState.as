@@ -14,7 +14,7 @@ package com.igwjam
 		private var numberOfPeople:Number;
 		
 		private var peopleCount:int = 0;
-		private var peoplePerLevel:int = 10;
+		public var peoplePerLevel:int = 10;
 		
 		private var levelFinished:Boolean = false;
 		private var finishTime:Number = 0;

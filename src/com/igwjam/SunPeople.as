@@ -244,7 +244,10 @@ package com.igwjam
 							var thisScore:int = FlxU.mapValues(this.tan, 0, 1.01, -5, 10, true);
 							
 							if(tan >= 0.9)
+							{
 								thisScore *= 2;
+								(FlxG.state as PlayState).peoplePerLevel += 2;
+							}
 								
 							FlxG.score += thisScore;
 							showScore(thisScore);

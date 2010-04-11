@@ -71,6 +71,17 @@ package org.flixel
 		{
 			return y + height/2;
 		}
+				
+		public function set centerX(x:Number):void
+		{
+			this.x = x - width/2;
+		}
+		
+		public function set centerY(y:Number):void
+		{
+			this.y = y - width/2;
+		}
+		
 		//TAN end
 	}
 }

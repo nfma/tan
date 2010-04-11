@@ -1,15 +1,10 @@
 package com.igwjam
 {
-	import com.igwjam.Sun;
-	import com.igwjam.SunPeople;
-	
-	import flash.ui.Mouse;
-	
 	import org.flixel.FlxG;
-	import org.flixel.FlxU;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxState;
 	import org.flixel.FlxText;
+	import org.flixel.FlxU;
 	
 	
 	public class PlayState extends FlxState
@@ -22,8 +17,10 @@ package com.igwjam
 		private var timestampLastSpawn:Number = -15.0;	//so they start spawning right away
 		
 		private var eveSky:FlxSprite;
+		private var nightSky:FlxSprite;
 
 		[Embed(source="../../../resources/midsky.png")] private var ImgMidSky:Class;
+		[Embed(source="../../../resources/nightSky.jpg")] private var ImgNightSky:Class;
 		[Embed(source="../../../resources/evesky.png")] private var ImgEveSky:Class;
 		[Embed(source="../../../resources/beach.png")] private var ImgBeach:Class;
 		[Embed(source="../../../resources/water.png")] private var ImgWater:Class;
@@ -45,6 +42,7 @@ package com.igwjam
 			eveSky.alpha = 0.0;
 			add(eveSky)
 			
+			sun.centerX = FlxG.width/2;
 			add(sun);
 			FlxG.mouse.show();
 			
@@ -53,6 +51,10 @@ package com.igwjam
 			
 			var beach:FlxSprite = new FlxSprite(0,0,ImgBeach);
 			add(beach);			
+			
+			nightSky = new FlxSprite(0,0,ImgNightSky);
+			nightSky.alpha = 0.0;
+			add(nightSky)
 
 			numberOfPeople = 3;
 			
@@ -90,19 +92,36 @@ package com.igwjam
 			}
 
 			//spawn new player
-			for ( i = 0; i < numberOfPeople; i++)	{
-				if( allPeople[i] == null && timeSinceStart - timestampLastSpawn > 15.0 ) {
-					timestampLastSpawn = timeSinceStart;
-					allPeople[i] = new SunPeople((FlxU.random() * 30) + 10, 5, 160*(i+1) );
-					add(allPeople[i]);
+			if(sun.top < 220)		//no people will come when it's evening!
+			{
+				for ( i = 0; i < numberOfPeople; i++)	{
+					if( allPeople[i] == null && timeSinceStart - timestampLastSpawn > 5.0 ) {
+						timestampLastSpawn = timeSinceStart;
+						allPeople[i] = new SunPeople((FlxU.random() * 20) + 7, 5, 160*(i+1) );		//tanMult: (FlxU.random() * 4) + 4
+						add(allPeople[i]);
+					}
 				}
 			}
+
 		
 			
 			//TODO: update sun movement
 			sun.move();
 			
 			eveSky.alpha = Math.sin(sun.y/208.0*(Math.PI/2.0));
+			
+			if(sun.top >= 240)
+			{				
+				//it's night so make it dark
+				if(nightSky.alpha < 0.6)
+					nightSky.alpha += 0.01;
+			}
+			else if(nightSky.alpha > 0.0)
+			{
+				//it's day so make it light again
+				nightSky.alpha -= 0.01;
+			}
+			
 //			trace(eveSky.alpha);
 						
 			//tan players
@@ -113,6 +132,11 @@ package com.igwjam
 						
 
 			score.text = FlxG.score.toString();
+			
+		}
+		
+		public function startNightFade():void
+		{
 			
 		}
 		

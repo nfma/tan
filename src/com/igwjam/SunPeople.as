@@ -62,6 +62,12 @@ package com.igwjam
 			if(this.beachState != tanning)
 				return;
 				
+			//if the sun is below the horizon, which means it's night we go home
+			if (sun.top >= 240)
+			{
+				untilPissOff = timeSinceTanning;
+			}	
+				
 			tan += calculateIntensityWith(sun) * tanMultiplier;
 			
 			tanText.text = (Math.round(tan*100)/100).toString();
@@ -69,12 +75,11 @@ package com.igwjam
 		
 		private function calculateIntensityWith(sun:Sun):Number
 		{
-			var xDistance:Number = Math.max(distanceBetween(this.centerX, sun.centerX), 1);	//we want 1 to be the max intensity!
+			var xDistance:Number = Math.max(distanceBetween(this.centerX, sun.centerX), 10);	//now we have a area of 20 pixel around the center where the intensity is max!
 			var yDistance:Number = distanceBetween(240, sun.top);		//sun.y because that's the top left corner...and we want the top!
 			
-			var intensity:Number = (1/(xDistance*500)) * yDistance/240;
+			var intensity:Number = (1/(xDistance*50)) * yDistance/240;
 
-			/*trace("intensity: " + intensity);*/
 
 			return intensity; 	//we want it to be low when the sun is far away and high when it's close sow we square it
 		}

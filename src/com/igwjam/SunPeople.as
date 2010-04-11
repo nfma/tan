@@ -181,8 +181,6 @@ package com.igwjam
 					
 						FlxG.state.add(timeToLeaveClock);
 						
-						trace(untilPissOff/17.0);
-						
 						timeToLeaveClock.play("clock_running");	
 					}
 										

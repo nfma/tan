@@ -83,11 +83,8 @@ package com.igwjam
 			
 			//and color it
 			var greenNBlue:int = FlxU.mapValues(sunHeight, 0, 1, 255, 0, true);
-			trace("greenNBlue: " + greenNBlue);
 			var sunColors:Array = FlxU.HEXtoRGB(color);
 			color = FlxU.RGBtoHEX(sunColors[0], greenNBlue, greenNBlue);
-			
-			//trace("scalefactor: " + scaleFactor);
 			
 			eyes.scaleAndUpdate(scaleFactor, scaleFactor);
 			eyes.x = x;

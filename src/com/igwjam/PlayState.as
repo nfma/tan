@@ -29,9 +29,10 @@ package com.igwjam
 		
 		protected var score:FlxText;
 
-		public function PlayState()
+		public function PlayState(difficultyLevel:Number)
 		{
 			super();
+			this.difficultyLevel = difficultyLevel;
 		}
 		
 		override public function create():void
@@ -75,8 +76,6 @@ package com.igwjam
 			score.alignment = "right";
 			score.text = FlxG.score.toString();
 			add(score);
-			
-			this.difficultyLevel = 3;
 		}
 		
 		override public function update():void
@@ -123,9 +122,7 @@ package com.igwjam
 				//it's day so make it light again
 				nightSky.alpha -= 0.01;
 			}
-			
-//			trace(eveSky.alpha);
-						
+									
 			//tan players
 			for each(var dude:SunPeople in allPeople) {
 				if(dude != null)

@@ -777,7 +777,7 @@ package org.flixel
 		}
 		
 		//converts a (red,green,blue):Array to a hex:Number
-		static public function RGBtoHEX(r,g,b):Number {
+		static public function RGBtoHEX(r:int,g:int,b:int):Number {
 			return r << 16 | g << 8 | b;
 		}
 		

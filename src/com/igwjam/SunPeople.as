@@ -4,6 +4,9 @@ package com.igwjam
 	
 	public class SunPeople extends FlxSprite
 	{
+		[Embed(source="../resources/lying_body.png")] private var ImgLyingBody:Class;
+		[Embed(source="../resources/lying_skin.png")] private var ImgLyingSkin:Class;
+		
 		[Embed(source="../resources/walking_dude.png")] private var ImgSunDude:Class;
 		[Embed(source="../resources/clock.png")] private var ImgClock:Class;
 
@@ -20,6 +23,10 @@ package com.igwjam
 		private var timeToLeaveClock:FlxSprite = null;
 		private var scoreAtPosition:ScoreText;
 		
+
+		private var lyingBodySprite:FlxSprite = null;
+		private var lyingSkinSprite:FlxSprite = null;
+
 		private var difficultyLevel:Number;
 		
 		
@@ -104,9 +111,7 @@ package com.igwjam
 		private function square(number:Number):Number 
 		{
 			return number * number;
-		}
-		
-		
+		}		
 		
 		private function showScore(score:Number): void
 		{
@@ -138,22 +143,34 @@ package com.igwjam
 			{
 				case walking:
 					if( this.x >= this.targetPosition ) {
-						this.x = this.targetPosition;
-						this.y = 340;
+					
 						this.velocity.x = 0.0;
 						
-						play("idle");		//TODO: call the crouching and lying down animation here 
 						this.beachState = tanning;
+						
+						this.alpha = 0.0;
+						
+						lyingBodySprite = new FlxSprite(this.targetPosition-70,340,ImgLyingBody);
+						lyingSkinSprite = new FlxSprite(this.targetPosition-70,340,ImgLyingSkin);
+												
+						FlxG.state.add(lyingBodySprite);
+						FlxG.state.add(lyingSkinSprite);
+						
 					}
 					break;
 				case tanning:
 					this.timeTanning += FlxG.elapsed;
 					
+					var red:int = 200 - Math.min(200, 200*tan) / 2;
+					
+					lyingSkinSprite.color = calculateTanColor();
+					
+					
 					if( timeToLeaveClock == null ) {
 						timeToLeaveClock = new FlxSprite();
 						timeToLeaveClock.loadGraphic(ImgClock, true, true, 16, 16);
 						timeToLeaveClock.x = this.x + 8;
-						timeToLeaveClock.y = this.y - 20;
+						timeToLeaveClock.y = this.y - 60;
 						timeToLeaveClock.addAnimation( "clock_running", [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], (17.0/untilPissOff), false);
 					
 						FlxG.state.add(timeToLeaveClock);
@@ -170,13 +187,14 @@ package com.igwjam
 						FlxG.score -= 10;
 						showScore(-10);
 
+						this.tanToLeave();
 						this.beachState = leaveAngry;
 						//TODO: make an angry animation 
 						play("leaveAngry");
 						
 					} else if(this.timeTanning >= untilPissOff)
 					{
-						if (this.tan > 0.7 && this.tan < 1.0)
+						if (this.tan > 0.7 && this.tan < 1.01)
 						{
 							this.velocity.x = 200.0;
 							this.y = 380;
@@ -184,6 +202,7 @@ package com.igwjam
 							FlxG.score += 10;
 							showScore(10);
 							
+							this.tanToLeave();
 							this.beachState = leaveHappy;
 							//TODO: make an happy animation 
 							play("leaveHappy");
@@ -197,7 +216,7 @@ package com.igwjam
 							
 							showScore(-10);
 							
-
+							this.tanToLeave();
 							this.beachState = leaveAngry;
 							//TODO: make an angry animation 
 							play("leaveAngry");
@@ -207,10 +226,8 @@ package com.igwjam
 					break;
 				case leaveHappy:
 				case leaveAngry:
-					if( timeToLeaveClock != null ) {
-						FlxG.state.defaultGroup.remove(timeToLeaveClock);
-						timeToLeaveClock = null;
-					}
+					
+					
 					if(this.x > FlxG.width + 0.1 * FlxG.width)		//add a little extra buffer so we are sure he/she is out of screen
 					{
 						this.beachState = terminated;
@@ -244,6 +261,38 @@ package com.igwjam
 		public function setState(state:int): void
 		{
 			this.beachState = state;
+		}
+		
+      	public function calculateTanColor(): int
+		{
+			var red:int = 200 - Math.min(200, 200*tan) / 2;
+			
+			if( tan < 0.7 ) {
+				return FlxU.RGBtoHEX(255,red,red);
+			} else if ( tan > 1.0 ) {
+				return FlxU.RGBtoHEX(255,red-50,red-20);
+			} 
+			else {
+				return FlxU.RGBtoHEX(210,red / 2+40, red/2+10 );
+			}	
+		}
+		
+		private function tanToLeave() {
+			
+			this.alpha = 1.0; //ned schön
+			
+			if( timeToLeaveClock != null ) {
+				FlxG.state.defaultGroup.remove(timeToLeaveClock);
+				timeToLeaveClock = null;
+			}
+			if( lyingBodySprite != null ) {
+				FlxG.state.defaultGroup.remove(lyingBodySprite);
+				lyingBodySprite = null;
+			}
+			if( lyingSkinSprite != null ) {
+				FlxG.state.defaultGroup.remove(lyingSkinSprite);
+				lyingSkinSprite = null;
+			}
 		}
 
 	}

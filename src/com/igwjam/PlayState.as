@@ -43,6 +43,7 @@ package com.igwjam
 			add(eveSky)
 			
 			sun.centerX = FlxG.width/2;
+			
 			add(sun);
 			FlxG.mouse.show();
 			

@@ -56,7 +56,7 @@ package com.igwjam
 				this.x = positionUnderBorder(newX, FlxG.width);
 				
 				var newY:int = mouseY-this.mYOff;
-				this.y = positionUnderBorder(newY, FlxG.height);
+				this.y = positionUnderBorder(newY, 240 + height);
 				
 			}
 			else if(mouse.justReleased())

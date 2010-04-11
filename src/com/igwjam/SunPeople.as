@@ -170,9 +170,9 @@ package com.igwjam
 						
 						lyingBodySprite = new FlxSprite(this.targetPosition-70,340,ImgLyingBody);
 						lyingSkinSprite = new FlxSprite(this.targetPosition-70,340,ImgLyingSkin);
-						FlxG.state.add(lyingSkinSprite);
-						FlxG.state.add(lyingBodySprite);
 						
+						//add it to the front of the array, so it is rendered in the background
+						FlxG.state.defaultGroup.members.splice(10,0,lyingSkinSprite,lyingBodySprite);
 					}
 					break;
 				case tanning:
@@ -309,6 +309,12 @@ package com.igwjam
 			
 			this.alpha = 1.0; //ned schön
 			walkSkinSprite.alpha = 1.0;
+			
+			//quick and dirty zorder hack
+			FlxG.state.defaultGroup.remove(this);
+			FlxG.state.defaultGroup.remove(walkSkinSprite);
+			FlxG.state.defaultGroup.add(walkSkinSprite);
+			FlxG.state.defaultGroup.add(this);
 			
 			if( timeToLeaveClock != null ) {
 				FlxG.state.defaultGroup.remove(timeToLeaveClock);

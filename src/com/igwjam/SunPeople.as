@@ -7,7 +7,9 @@ package com.igwjam
 		[Embed(source="../resources/lying_body.png")] private var ImgLyingBody:Class;
 		[Embed(source="../resources/lying_skin.png")] private var ImgLyingSkin:Class;
 		
-		[Embed(source="../resources/walking_dude.png")] private var ImgSunDude:Class;
+		[Embed(source="../resources/walk_skin.png")] private var ImgWalkSkin:Class;
+		[Embed(source="../resources/walk_body.png")] private var ImgWalkBody:Class;
+		
 		[Embed(source="../resources/clock.png")] private var ImgClock:Class;
 
 		
@@ -26,6 +28,8 @@ package com.igwjam
 
 		private var lyingBodySprite:FlxSprite = null;
 		private var lyingSkinSprite:FlxSprite = null;
+		
+		private var walkSkinSprite:FlxSprite = null;
 
 		private var difficultyLevel:Number;
 		
@@ -46,24 +50,36 @@ package com.igwjam
 			
 			untilPissOff = duration;
 			
-			super(0, 380);
-			loadGraphic(ImgSunDude, true, true, 32, 64);
+			super(0, 300);
+			loadGraphic(ImgWalkBody, true, true, 65, 140);
+			
+			walkSkinSprite = new FlxSprite(0,300);
+			walkSkinSprite.loadGraphic(ImgWalkSkin, true, true, 65, 140);
+			FlxG.state.add(walkSkinSprite);
+			walkSkinSprite.color = this.calculateTanColor();
 			
 			tanText = new FlxText(0, 10,FlxG.width);
 			tanText.setFormat(null, 8, 0x000000, "left");
 			tanText.text = tan.toString();
 			
-			addAnimation("idle", [0]);
-			addAnimation("walk", [0, 1, 2], 4, true);
-			addAnimation("leaveHappy", [0, 1, 2], 2, true);
-			addAnimation("leaveAngry", [0, 1, 2], 8, true);
+
+			addAnimation("walk", [0, 1, 2,3], 4, true);
+			addAnimation("leaveHappy", [0, 1, 2,3], 2, true);
+			addAnimation("leaveAngry", [0, 1, 2,3], 8, true);
+			
+			walkSkinSprite.addAnimation("walk", [0, 1, 2,3], 4, true);
+			walkSkinSprite.addAnimation("leaveHappy", [0, 1, 2,3], 2, true);
+			walkSkinSprite.addAnimation("leaveAngry", [0, 1, 2,3], 8, true);
 			
 			scoreAtPosition = new ScoreText(1,0,0, 100, "");
 			scoreAtPosition.setFormat(null,20,0x119900, "center");
 			
 			this.velocity.x = 200.0;
+			walkSkinSprite.velocity.x = 200.0;
+			
 			this.beachState = walking;
 			play("walk");
+			walkSkinSprite.play("walk");
 		}
 		
 
@@ -145,16 +161,17 @@ package com.igwjam
 					if( this.x >= this.targetPosition ) {
 					
 						this.velocity.x = 0.0;
+						walkSkinSprite.velocity.x = 0.0;
 						
 						this.beachState = tanning;
 						
 						this.alpha = 0.0;
+						walkSkinSprite.alpha = 0.0;
 						
 						lyingBodySprite = new FlxSprite(this.targetPosition-70,340,ImgLyingBody);
 						lyingSkinSprite = new FlxSprite(this.targetPosition-70,340,ImgLyingSkin);
-												
-						FlxG.state.add(lyingBodySprite);
 						FlxG.state.add(lyingSkinSprite);
+						FlxG.state.add(lyingBodySprite);
 						
 					}
 					break;
@@ -183,21 +200,25 @@ package com.igwjam
 					if( this.tan > 1.2 )
 					{
 						this.velocity.x = 250.0;
-						this.y = 380;
+						walkSkinSprite.velocity.x = 250.0;
+						
 						FlxG.score -= 10;
 						showScore(-10);
+						
+						walkSkinSprite.color = this.calculateTanColor();
 
 						this.tanToLeave();
 						this.beachState = leaveAngry;
 						//TODO: make an angry animation 
 						play("leaveAngry");
+						walkSkinSprite.play("leaveAngry");
 						
 					} else if(this.timeTanning >= untilPissOff)
 					{
 						if (this.tan >= 0.0 && this.tan < 1.01)
 						{
 							this.velocity.x = 200.0;
-							this.y = 380;
+							walkSkinSprite.velocity.x = 200.0;
 							
 							var thisScore:int = FlxU.mapValues(this.tan, 0, 1.01, 0, 10, true);
 							
@@ -207,25 +228,31 @@ package com.igwjam
 							FlxG.score += thisScore;
 							showScore(thisScore);
 							
+							walkSkinSprite.color = this.calculateTanColor();
+							
 							this.tanToLeave();
 							this.beachState = leaveHappy;
 							//TODO: make an happy animation 
 							play("leaveHappy");
+							walkSkinSprite.play("leaveHappy");
 						}
 						else
 						{
 							this.velocity.x = 250.0;
-							this.y = 380;
+							walkSkinSprite.velocity.x = 250.0;
 							
 							var thisScore:int = FlxU.mapValues(this.tan, 1.01, 1.2, 0, 10, true);
 							FlxG.score -= thisScore;
 							
 							showScore(-thisScore);
 							
+							walkSkinSprite.color = this.calculateTanColor();
+							
 							this.tanToLeave();
 							this.beachState = leaveAngry;
 							//TODO: make an angry animation 
 							play("leaveAngry");
+							walkSkinSprite.play("leaveAngry");
 							
 						}
 					}
@@ -237,6 +264,7 @@ package com.igwjam
 					if(this.x > FlxG.width + 0.1 * FlxG.width)		//add a little extra buffer so we are sure he/she is out of screen
 					{
 						this.beachState = terminated;
+						FlxG.state.defaultGroup.remove(walkSkinSprite);
 					}
 					break;
 					
@@ -283,9 +311,10 @@ package com.igwjam
 			}	
 		}
 		
-		private function tanToLeave() {
+		private function tanToLeave() :void {
 			
 			this.alpha = 1.0; //ned schön
+			walkSkinSprite.alpha = 1.0;
 			
 			if( timeToLeaveClock != null ) {
 				FlxG.state.defaultGroup.remove(timeToLeaveClock);

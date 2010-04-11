@@ -13,6 +13,8 @@ package com.igwjam
 		[Embed(source="../resources/lying_skin_man.png")] private var ImgLyingSkinMan:Class;
 		[Embed(source="../resources/walk_skin_man.png")] private var ImgWalkSkinMan:Class;
 		[Embed(source="../resources/walk_body_man.png")] private var ImgWalkBodyMan:Class;
+		[Embed(source="../resources/angry.png")] private var ImgAngryBalloon:Class;
+		[Embed(source="../resources/happy.png")] private var ImgHappyBalloon:Class;
 		
 		[Embed(source="../resources/clock.png")] private var ImgClock:Class;
 		
@@ -27,14 +29,16 @@ package com.igwjam
 		private var tanMultiplier:Number;
 		private var targetPosition:int;
 
-		private var timeToLeaveClock:FlxSprite = null;
+		private var timeToLeaveClock:FlxSprite;
 		private var scoreAtPosition:ScoreText;
 		
+		private var angryBalloon:FlxSprite;
+		private var happyBalloon:FlxSprite;
 
-		private var lyingBodySprite:FlxSprite = null;
-		private var lyingSkinSprite:FlxSprite = null;
+		private var lyingBodySprite:FlxSprite;
+		private var lyingSkinSprite:FlxSprite;
 		
-		private var walkSkinSprite:FlxSprite = null;
+		private var walkSkinSprite:FlxSprite;
 
 		private var difficultyLevel:Number;
 		
@@ -60,7 +64,6 @@ package com.igwjam
 			super(0, 300);
 		
 			gender = ( Math.round(Math.random()*100) % 2 == 0 )
-			
 				
 			loadGraphic(ImgWalkBody, true, true, 65, 140);
 			
@@ -74,7 +77,15 @@ package com.igwjam
 			}
 			FlxG.state.add(walkSkinSprite);
 			walkSkinSprite.color = this.calculateTanColor();
-			
+
+			angryBalloon = new FlxSprite(0, 0, ImgAngryBalloon);
+			angryBalloon.alpha = 0;
+			angryBalloon.centerY = top - 20;
+			FlxG.state.add(angryBalloon);
+			happyBalloon = new FlxSprite(0, 0, ImgHappyBalloon);
+			happyBalloon.alpha = 0;
+			happyBalloon.centerY = top - 20;
+			FlxG.state.add(happyBalloon);
 
 			addAnimation("walk", [0, 1, 2,3], 4, true);
 			addAnimation("leaveHappy", [0, 1, 2,3], 2, true);
@@ -84,7 +95,6 @@ package com.igwjam
 			walkSkinSprite.addAnimation("leaveHappy", [0, 1, 2,3], 2, true);
 			walkSkinSprite.addAnimation("leaveAngry", [0, 1, 2,3], 8, true);
 			
-
 			scoreAtPosition = new ScoreText(1,0,0, 200, "");
 			scoreAtPosition.setFormat("score", 80, 0x119900, "center");
 			
@@ -114,11 +124,6 @@ package com.igwjam
 		
 		private function calculateIntensityWith(sun:Sun):Number
 		{
-			var xDistance:Number = Math.max(distanceBetween(this.centerX, sun.centerX), 10);	//now we have a area of 20 pixel around the center where the intensity is max!
-			var yDistance:Number = distanceBetween(240, sun.top);		//sun.y because that's the top left corner...and we want the top!
-			
-			var intensity:Number = (1/(xDistance*50)) * yDistance/240;
-//			return intensity;
 			return calculateIntensityForX(sun) * calculateIntensityForY(sun) * difficultyLevel;
 		}
 		
@@ -161,8 +166,9 @@ package com.igwjam
 		
 		override public function update():void
 		{
-			//TODO: update statemachine			
-		
+			happyBalloon.centerX = centerX + 40;
+			angryBalloon.centerX = centerX + 40;
+
 			switch(this.beachState)
 			{
 				case walking:
@@ -221,7 +227,9 @@ package com.igwjam
 
 						this.tanToLeave();
 						this.beachState = leaveAngry;
-						//TODO: make an angry animation 
+						
+						angryBalloon.alpha = 1;
+
 						play("leaveAngry");
 						walkSkinSprite.play("leaveAngry");
 						
@@ -245,9 +253,16 @@ package com.igwjam
 							
 							this.tanToLeave();
 							this.beachState = leaveHappy;
-							//TODO: make an happy animation 
-							play("leaveHappy");
-							walkSkinSprite.play("leaveHappy");
+
+							if(tan >= 0.7)
+							{
+								happyBalloon.alpha = 1;
+								play("leaveHappy");
+								walkSkinSprite.play("leaveHappy");
+							} else {
+								play("walk");
+								walkSkinSprite.play("walk");
+							}
 						}
 						else
 						{
@@ -263,26 +278,23 @@ package com.igwjam
 							
 							this.tanToLeave();
 							this.beachState = leaveAngry;
-							//TODO: make an angry animation 
+
+							angryBalloon.alpha = 1;
+							
 							play("leaveAngry");
 							walkSkinSprite.play("leaveAngry");
-							
 						}
 					}
 					break;
 				case leaveHappy:
 				case leaveAngry:
-					
-					
+				default:
 					if(this.x > FlxG.width + 0.1 * FlxG.width)		//add a little extra buffer so we are sure he/she is out of screen
 					{
 						this.beachState = terminated;
 						FlxG.state.defaultGroup.remove(walkSkinSprite);
 					}
 					break;
-					
-//				default:
-//					break;
 			}
 			
 			super.update();

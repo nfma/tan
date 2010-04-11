@@ -194,13 +194,18 @@ package com.igwjam
 						
 					} else if(this.timeTanning >= untilPissOff)
 					{
-						if (this.tan > 0.7 && this.tan < 1.01)
+						if (this.tan >= 0.0 && this.tan < 1.01)
 						{
 							this.velocity.x = 200.0;
 							this.y = 380;
 							
-							FlxG.score += 10;
-							showScore(10);
+							var thisScore:int = FlxU.mapValues(this.tan, 0, 1.01, 0, 10, true);
+							
+							if(tan >= 1)
+								thisScore *= 2;
+								
+							FlxG.score += thisScore;
+							showScore(thisScore);
 							
 							this.tanToLeave();
 							this.beachState = leaveHappy;
@@ -212,9 +217,10 @@ package com.igwjam
 							this.velocity.x = 250.0;
 							this.y = 380;
 							
-							FlxG.score -= 10;
+							var thisScore:int = FlxU.mapValues(this.tan, 1.01, 1.2, 0, 10, true);
+							FlxG.score -= thisScore;
 							
-							showScore(-10);
+							showScore(-thisScore);
 							
 							this.tanToLeave();
 							this.beachState = leaveAngry;

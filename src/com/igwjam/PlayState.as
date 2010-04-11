@@ -106,8 +106,6 @@ package com.igwjam
 					}
 				}
 			}
-
-		
 			
 			//TODO: update sun movement
 			sun.move();

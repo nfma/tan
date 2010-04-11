@@ -14,10 +14,12 @@ package com.igwjam
 		private var numberOfPeople:Number;
 		
 		public var timeSinceStart:Number = 0.0;
-		private var timestampLastSpawn:Number = -15.0;	//so they start spawning right away
+		private var timestampLastSpawn:Number = -10.0;	//so they start spawning right away
 		
 		private var eveSky:FlxSprite;
 		private var nightSky:FlxSprite;
+		
+		private var difficultyLevel:Number;
 
 		[Embed(source="../../../resources/midsky.png")] private var ImgMidSky:Class;
 		[Embed(source="../../../resources/nightSky.jpg")] private var ImgNightSky:Class;
@@ -70,9 +72,10 @@ package com.igwjam
 			score.color = 0x000000;
 			score.size = 16;
 			score.alignment = "right";
-			//score.scrollFactor = ssf;
 			score.text = FlxG.score.toString();
 			add(score);
+			
+			this.difficultyLevel = 3;
 		}
 		
 		override public function update():void
@@ -95,9 +98,9 @@ package com.igwjam
 			if(sun.top < 220)		//no people will come when it's evening!
 			{
 				for ( i = 0; i < numberOfPeople; i++)	{
-					if( allPeople[i] == null && timeSinceStart - timestampLastSpawn > 5.0 ) {
+					if( allPeople[i] == null && timeSinceStart - timestampLastSpawn > (5.0 /this.difficultyLevel) ) {
 						timestampLastSpawn = timeSinceStart;
-						allPeople[i] = new SunPeople((FlxU.random() * 20) + 7, 5, 160*(i+1), 1);		//tanMult: (FlxU.random() * 4) + 4
+						allPeople[i] = new SunPeople(((FlxU.random() * 20) + 7) * (1 / this.difficultyLevel), 5, 160*(i+1), this.difficultyLevel);
 						add(allPeople[i]);
 					}
 				}

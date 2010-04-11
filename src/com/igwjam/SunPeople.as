@@ -127,9 +127,7 @@ package com.igwjam
 		private function square(number:Number):Number 
 		{
 			return number * number;
-		}
-		
-		
+		}		
 		
 		private function showScore(score:Number): void
 		{
@@ -217,7 +215,7 @@ package com.igwjam
 						
 					} else if(this.timeTanning >= untilPissOff)
 					{
-						if (this.tan > 0.7 && this.tan < 1.0)
+						if (this.tan > 0.7 && this.tan < 1.01)
 						{
 							this.velocity.x = 200.0;
 							walkSkinSprite.velocity.x = 200.0;
